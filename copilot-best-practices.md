@@ -248,6 +248,75 @@ Split commits when you've made changes to:
 
 ---
 
+## 🏷️ GitHub Issue Management Rules
+
+### CRITICAL: Always Check Labels Exist Before Creating Issues
+
+**When creating GitHub issues with `gh issue create`:**
+
+1. **Check if custom labels exist first**:
+
+   ```bash
+   /bin/bash -c 'gh label list'
+   ```
+
+2. **Create missing labels before using them**:
+
+   ```bash
+   /bin/bash -c 'gh label create <label-name> --description "<description>" --color "<hex-color>"'
+   ```
+
+3. **Common label colors** (GitHub standards):
+
+   - `bug` - `#d73a4a` (red)
+   - `enhancement` - `#a2eeef` (light blue)
+   - `documentation` - `#0075ca` (blue)
+   - `good first issue` - `#7057ff` (purple)
+   - `help wanted` - `#008672` (green)
+
+4. **Then create issues** with those labels:
+
+   ```bash
+   /bin/bash -c 'gh issue create --title "..." --body "..." --label "bug,enhancement"'
+   ```
+
+**Why bash wrapper?** See `copilot-terminal-config.md` - user may have zsh aliases/configs that interfere with gh commands.
+
+### Example Workflow
+
+```bash
+# Step 1: Check existing labels (with bash wrapper)
+/bin/bash -c 'gh label list'
+
+# Step 2: Create custom labels if needed
+/bin/bash -c 'gh label create formatter --description "Issues related to SQL formatting logic" --color "0366d6"'
+/bin/bash -c 'gh label create post-processing --description "Issues related to post-processing passes" --color "d4c5f9"'
+
+# Step 3: Create issue with labels
+/bin/bash -c 'gh issue create \
+  --title "Fix FROM/JOIN alias placement" \
+  --body "**Problem**: ..." \
+  --label "enhancement,formatter,post-processing"'
+```
+
+### Closing Issues
+
+**When work is complete**, close issues with reference in commit:
+
+```bash
+# In commit message
+git commit -m "fix: Correct FROM/JOIN alias placement (closes #3)"
+
+# Or manually
+/bin/bash -c 'gh issue close 3 --comment "Fixed in commit abc123"'
+```
+
+### Why This Matters
+
+Labels help organize issues by category, priority, and type. Attempting to use non-existent labels causes `gh issue create` to fail with cryptic errors like "could not add label: 'formatter' not found". Always verify labels exist or create them first.
+
+---
+
 ## 📂 Documentation Organization Rules
 
 ### CRITICAL: Where to Place Documentation Files
