@@ -45,12 +45,28 @@ PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 **Command pattern for agents**:
 
 ```bash
-# Instead of relying on terminal state, use explicit clean shell:
-/bin/bash -c 'command here'
+# COMPLETE FORMAT - Use this exact pattern for ALL commands
+# Apple Silicon Mac (Homebrew in /opt/homebrew):
+PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --noprofile --norc -c 'command here'
 
-# Or with minimal PATH:
-PATH=/usr/local/bin:/usr/bin:/bin npm run compile
+# Intel Mac (Homebrew in /usr/local):
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --noprofile --norc -c 'command here'
+
+# Linux:
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --noprofile --norc -c 'command here'
+
+# Examples:
+PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --noprofile --norc -c 'npm run compile'
+PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --noprofile --norc -c 'git status'
+PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --noprofile --norc -c '/bin/cat file.txt'
 ```
+
+**Component breakdown**:
+- `PATH=...` - Sets minimal, predictable PATH (overrides user's custom PATH)
+- `/bin/bash` - Uses system bash (NOT user's default shell like zsh)
+- `--noprofile` - Skips reading ~/.bash_profile
+- `--norc` - Skips reading ~/.bashrc
+- `-c 'command'` - Runs command in clean environment
 
 **Why bash, not zsh**:
 
@@ -94,22 +110,42 @@ cmd.exe /K
 **macOS/Linux**:
 
 ```bash
-# GOOD - Explicit clean environment
-/bin/bash -c 'cat file.txt'
+# COMPLETE FORMAT - Apple Silicon Mac
+PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --noprofile --norc -c 'command here'
 
-# BAD - Uses user's shell with custom aliases
-cat file.txt
+# COMPLETE FORMAT - Intel Mac or Linux  
+PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --noprofile --norc -c 'command here'
+
+# Examples:
+PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --noprofile --norc -c 'npm run compile'
+PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --noprofile --norc -c '/bin/cat file.txt'
 ```
+
+**Component breakdown**:
+
+- `PATH=...` - Sets minimal, predictable PATH (overrides user's custom PATH)
+- `/bin/bash` - Uses system bash (NOT user's default shell like zsh)
+- `--noprofile` - Skips reading ~/.bash_profile
+- `--norc` - Skips reading ~/.bashrc
+- `-c 'command'` - Runs command in clean environment
 
 **Windows**:
 
 ```cmd
-# GOOD - Explicit cmd.exe
-cmd.exe /c type file.txt
+# COMPLETE FORMAT - Use cmd.exe with /c flag
+cmd.exe /c command here
 
-# BAD - Uses PowerShell with custom profile
-type file.txt
+# Examples:
+cmd.exe /c type file.txt
+cmd.exe /c dir
+cmd.exe /c npm run compile
 ```
+
+**Component breakdown**:
+
+- `cmd.exe` - Uses system command prompt (NOT PowerShell)
+- `/c` - Runs command and terminates
+- No profile loading (cmd.exe doesn't have complex profiles like PowerShell)
 
 ### Standard Utilities - Use Absolute Paths
 

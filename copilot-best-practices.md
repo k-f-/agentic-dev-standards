@@ -167,7 +167,7 @@ PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --
    git diff
    less file.txt
    man command
-   
+
    # CORRECT - Disable pagers or limit output
    git --no-pager log -10 --oneline
    git --no-pager diff | head -50
