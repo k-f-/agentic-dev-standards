@@ -6,6 +6,12 @@
 
 ---
 
+## Further specific rules to ALWAYS be incorporated
+
+`copilot-terminal-config.md`
+`copilot-commit-convention.md`
+
+
 ## 🎯 Meta-Rule: Capturing New Instructions (CRITICAL)
 
 **When you discover a new rule, pattern, or best practice during work:**
@@ -154,6 +160,21 @@ PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --
 
 3. **Use file reads for simple checks** - Read files directly instead of running commands when possible
 
+4. **NEVER use commands that trigger pagers** - Pagers will hang VS Code and kill the session:
+   ```bash
+   # WRONG - These can trigger pagers and hang VS Code
+   git log
+   git diff
+   less file.txt
+   man command
+   
+   # CORRECT - Disable pagers or limit output
+   git --no-pager log -10 --oneline
+   git --no-pager diff | head -50
+   cat file.txt | head -100
+   command --help | head -20
+   ```
+
 ### Never Do
 
 - ❌ Rely on user's default shell (zsh, fish, PowerShell with custom profiles)
@@ -161,6 +182,7 @@ PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --
 - ❌ Use bare command names for core utilities (`cat`, `ls`, `grep`)
 - ❌ Launch terminals that load slow configuration files
 - ❌ Trust VS Code's "simplified command" optimization - ALWAYS use the full bash wrapper
+- ❌ Use commands that trigger pagers (`git log`, `git diff`, `less`, `more`, `man`) without `--no-pager` or output limiting
 
 ### Why This Matters
 
