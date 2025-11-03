@@ -108,6 +108,7 @@ Cursor's Composer mode can make multi-file changes autonomously:
 ## Key Features
 
 **vs GitHub Copilot**:
+
 - ✅ Better multi-file editing (Composer mode)
 - ✅ Multiple AI models (GPT-4, Claude 3.5, etc.)
 - ✅ Larger context window (~8000 tokens for rules)
@@ -117,21 +118,25 @@ Cursor's Composer mode can make multi-file changes autonomously:
 ## Best Practices
 
 **Keep `.cursorrules` concise**:
+
 - Reference universal standards (don't duplicate)
 - Include only project-specific critical info
 - Use under 8000 tokens for best results
 
 **Use Composer for**:
+
 - Large refactorings across multiple files
 - Adding new features with tests
 - Implementing complex requirements
 
 **Use Chat for**:
+
 - Questions about codebase
 - Explaining code
 - Small code snippets
 
 **Use Inline Edit for**:
+
 - Quick local changes
 - Formatting improvements
 - Renaming patterns
@@ -153,11 +158,13 @@ Cursor's Composer mode can make multi-file changes autonomously:
 ## Summary
 
 **Key Files**:
+
 - `.cursorrules` - Cursor reads this automatically (~8000 token limit)
 - `.vscode/settings.json` - Terminal configuration
 - `agentic-dev-standards/` - Universal standards
 
 **Advantages**:
+
 - Excellent multi-file editing
 - Multiple AI models
 - Larger context window

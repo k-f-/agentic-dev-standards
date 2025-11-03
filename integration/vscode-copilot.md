@@ -92,12 +92,14 @@ Example:
 
 Example:
 ```
+
 src/
 ├── components/      # React components
 ├── services/        # API clients, business logic
 ├── utils/          # Helper functions
 ├── types/          # TypeScript type definitions
 └── tests/          # Test files
+
 ```
 
 #### Environment Variables
@@ -159,6 +161,7 @@ Create or edit `.vscode/settings.json`:
 ```
 
 **Note**: Adjust PATH for Apple Silicon vs Intel Mac:
+
 - **Apple Silicon**: `/opt/homebrew/bin:/usr/local/bin:...`
 - **Intel Mac**: `/usr/local/bin:/usr/bin:...`
 
@@ -180,11 +183,13 @@ git commit -m "chore: Configure GitHub Copilot with universal standards"
 ### Verifying Configuration
 
 Ask Copilot:
+
 ```
 "Have you read the universal standards from agentic-dev-standards/?"
 ```
 
 Expected response should reference:
+
 - Terminal standards (clean bash wrapper)
 - Commit conventions (Conventional Commits)
 - Universal best practices
@@ -196,6 +201,7 @@ Expected response should reference:
 User: "Create a new feature branch for user authentication"
 
 Copilot:
+
 ```bash
 # Following branch-strategy.md from universal standards
 git checkout -b feature/user-authentication
@@ -206,6 +212,7 @@ git checkout -b feature/user-authentication
 User: "Check git status"
 
 Copilot:
+
 ```bash
 # Following terminal-standards.md
 PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --noprofile --norc -c 'git status'
@@ -216,6 +223,7 @@ PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --
 User: "Commit these changes"
 
 Copilot:
+
 ```bash
 git commit -m "feat: Add user authentication endpoint
 
@@ -231,6 +239,7 @@ git commit -m "feat: Add user authentication endpoint
 `.github/copilot-instructions.md` has a limit of ~4000 tokens.
 
 **Mitigation**:
+
 - Keep project-specific instructions concise
 - Reference universal standards (don't duplicate)
 - Use external docs for detailed info
@@ -240,6 +249,7 @@ git commit -m "feat: Add user authentication endpoint
 Copilot doesn't auto-reload instructions when changed.
 
 **Mitigation**:
+
 - Reload VSCode window after changing instructions
 - Or ask Copilot: "Please re-read .github/copilot-instructions.md"
 
@@ -248,6 +258,7 @@ Copilot doesn't auto-reload instructions when changed.
 Copilot chat can suggest changes to multiple files but doesn't apply them automatically.
 
 **Mitigation**:
+
 - Use Copilot suggestions + manual edits
 - Or consider Cursor for better multi-file editing
 
@@ -258,6 +269,7 @@ Copilot chat can suggest changes to multiple files but doesn't apply them automa
 **Symptoms**: Copilot doesn't use bash wrapper, doesn't follow commit conventions
 
 **Solutions**:
+
 1. Verify `.github/copilot-instructions.md` exists and has critical warnings at top
 2. Reload VSCode window
 3. Check file size is under ~4000 tokens
@@ -268,6 +280,7 @@ Copilot chat can suggest changes to multiple files but doesn't apply them automa
 **Symptoms**: Commands work manually but fail when Copilot runs them
 
 **Solutions**:
+
 1. Verify `.vscode/settings.json` has terminal profiles configured
 2. Check PATH is correct for your system (Apple Silicon vs Intel)
 3. Ensure Copilot is using bash wrapper (see `terminal-standards.md`)
@@ -277,6 +290,7 @@ Copilot chat can suggest changes to multiple files but doesn't apply them automa
 **Symptoms**: Copilot says "can't find agentic-dev-standards/"
 
 **Solutions**:
+
 ```bash
 # Initialize submodule
 git submodule update --init --recursive
@@ -292,6 +306,7 @@ ls agentic-dev-standards/
 **Symptoms**: Some instructions seem ignored, file > 4000 tokens
 
 **Solutions**:
+
 1. Move project-specific details to separate docs
 2. Reference docs instead of duplicating: "See docs/development/testing-strategy.md"
 3. Keep only critical info in `.github/copilot-instructions.md`
@@ -420,6 +435,7 @@ Copilot will automatically use the updated standards (after VSCode reload).
 ## Summary
 
 **Setup Checklist**:
+
 - [x] Install GitHub Copilot extension
 - [x] Add `agentic-dev-standards` submodule
 - [x] Create `.github/copilot-instructions.md`
@@ -429,11 +445,13 @@ Copilot will automatically use the updated standards (after VSCode reload).
 - [x] Test by asking Copilot to follow standards
 
 **Key Files**:
+
 - `.github/copilot-instructions.md` - Copilot reads this automatically
 - `.vscode/settings.json` - Terminal profiles for clean bash
 - `agentic-dev-standards/` - Universal standards (submodule)
 
 **Next Steps**:
+
 1. Follow setup steps above
 2. Customize project-specific instructions
 3. Test Copilot follows standards
@@ -442,6 +460,7 @@ Copilot will automatically use the updated standards (after VSCode reload).
 ---
 
 For general best practices applicable to all tools, see:
+
 - [`universal-agent-rules.md`](../universal-agent-rules.md)
 - [`terminal-standards.md`](../terminal-standards.md)
 - [`commit-conventions.md`](../commit-conventions.md)

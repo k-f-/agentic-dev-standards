@@ -109,18 +109,21 @@ Windsurf's Cascade mode handles complex multi-step tasks:
 ## Key Features
 
 **Cascade Mode**:
+
 - Complex multi-file tasks
 - Autonomous planning and execution
 - Context-aware suggestions
 - Follows rules automatically
 
 **vs Cursor**:
+
 - Similar feature set
 - Different UX/UI approach
 - Both support autonomous modes
 - Both read rules files
 
 **vs GitHub Copilot**:
+
 - Much better multi-file editing
 - Autonomous Cascade mode
 - Multiple AI models
@@ -129,21 +132,25 @@ Windsurf's Cascade mode handles complex multi-step tasks:
 ## Best Practices
 
 **Keep `.windsurfrules` focused**:
+
 - Reference universal standards (don't duplicate)
 - Include only critical project-specific info
 - Keep under ~8000 tokens
 
 **Use Cascade for**:
+
 - Large refactorings
 - Feature implementation end-to-end
 - Complex multi-file changes
 
 **Use Chat for**:
+
 - Questions
 - Explanations
 - Small code snippets
 
 **Use Inline AI for**:
+
 - Quick local edits
 - Formatting
 - Simple refactorings
@@ -165,11 +172,13 @@ Windsurf's Cascade mode handles complex multi-step tasks:
 ## Summary
 
 **Key Files**:
+
 - `.windsurfrules` - Windsurf reads this (~8000 tokens)
 - `.vscode/settings.json` - Terminal config
 - `agentic-dev-standards/` - Universal standards
 
 **Advantages**:
+
 - Cascade mode for complex tasks
 - Good multi-file editing
 - Multiple AI models

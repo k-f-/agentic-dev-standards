@@ -11,6 +11,7 @@ When working with AI coding assistants over extended periods, maintaining sessio
 ### When to Create Session Summaries
 
 Create a session summary when:
+
 - ✅ User indicates session is ending ("leaving", "pausing", "done for now")
 - ✅ After completing major milestones
 - ✅ Every 24 hours of active work
@@ -280,6 +281,7 @@ Maintain a `README.md` in `docs/archive/session-summaries/` with an index:
 2. **Verify test status**: Note passing/failing tests
 3. **Update index**: Add session to README.md
 4. **Commit the summary**: Use conventional commit format
+
    ```bash
    git commit -m "docs: Add session summary for YYYY-MM-DD"
    ```
@@ -298,29 +300,37 @@ git commit -m "docs: Add session summary for 2025-10-31"
 ### ❌ Don't Do This
 
 **Overly brief summaries**:
+
 ```markdown
 # Session Summary - 2025-10-31
 Fixed some bugs. Made 3 commits.
 ```
+
 *Problem*: No context, no decisions, no next steps
 
 **Missing technical details**:
+
 ```markdown
 Worked on the API. It's better now.
 ```
+
 *Problem*: What changed? Why? How?
 
 **No pending items**:
+
 ```markdown
 Everything is done!
 ```
+
 *Problem*: There's always something pending or that could be improved
 
 **Created at project root**:
+
 ```
 project-root/
 ├── SESSION_SUMMARY.md  ❌ Wrong location
 ```
+
 *Problem*: Should be in `docs/archive/session-summaries/`
 
 ## Integration with AI Tools
@@ -328,6 +338,7 @@ project-root/
 ### VSCode Copilot
 
 At end of session, ask Copilot:
+
 ```
 "Create a session summary for today's work in docs/archive/session-summaries/YYYY-MM-DD_topic.md"
 ```
@@ -335,6 +346,7 @@ At end of session, ask Copilot:
 ### Cursor
 
 At end of session:
+
 ```
 "Generate a comprehensive session summary following the template in workflow-patterns/session-management.md"
 ```
@@ -390,21 +402,25 @@ jobs:
 ## Summary
 
 **Session summaries are critical for**:
+
 - Preserving context across sessions
 - Documenting decisions and rationale
 - Tracking progress and blockers
 - Enabling better AI assistance in future sessions
 
 **Create them**:
+
 - At end of every work session
 - After major milestones
 - Every 24 hours of active work
 
 **Store them**:
+
 - `docs/archive/session-summaries/YYYY-MM-DD_topic.md`
 - Update index in `docs/archive/session-summaries/README.md`
 
 **Commit them**:
+
 ```bash
 git commit -m "docs: Add session summary for YYYY-MM-DD"
 ```

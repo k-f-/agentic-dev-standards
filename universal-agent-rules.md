@@ -9,10 +9,12 @@
 ## 📚 Related Standards
 
 **CRITICAL - Read these first**:
+
 - **`terminal-standards.md`** - Clean shell environment requirements (MUST READ)
 - **`commit-conventions.md`** - Conventional Commits standard
 
 **Workflow-specific guidance**:
+
 - **`workflow-patterns/session-management.md`** - Session summaries and tracking
 - **`workflow-patterns/branch-strategy.md`** - Branch naming and git workflows
 - **`workflow-patterns/github-issues.md`** - Issue and PR management
@@ -55,6 +57,7 @@ Rules discovered during work are often the most valuable because they come from 
 1. **Check if `agentic-dev-standards/` submodule exists**
 2. **If NO**: Ask user "Should I add the agentic-dev-standards submodule to this project?"
 3. **If YES**: Run update to get latest universal guidelines:
+
    ```bash
    git submodule update --remote agentic-dev-standards
    ```
@@ -63,6 +66,7 @@ Rules discovered during work are often the most valuable because they come from 
 
 1. **Ask user**: "Should this update be pushed to agentic-dev-standards submodule?"
 2. **If YES**:
+
    ```bash
    cd agentic-dev-standards
    git add .
@@ -94,6 +98,7 @@ Then create your tool-specific instructions file (see `integration/` for templat
 ### Quick Reference
 
 **macOS/Linux**:
+
 ```bash
 # ALWAYS wrap commands in clean bash
 PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --noprofile --norc -c 'command'
@@ -105,16 +110,19 @@ PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --
 ```
 
 **Windows**:
+
 ```cmd
 cmd.exe /c command
 ```
 
 **NEVER**:
+
 - ❌ Use commands that trigger pagers (`git log`, `git diff` without `--no-pager`)
 - ❌ Rely on user's default shell or aliases
 - ❌ Use bare command names for core utilities
 
 **ALWAYS**:
+
 - ✅ Use `git --no-pager <subcommand>`
 - ✅ Combine commands with `&&` to reduce terminal calls
 - ✅ Use absolute paths (`/bin/cat`, `/bin/ls`)
@@ -132,11 +140,13 @@ cmd.exe /c command
 ### Quick Reference
 
 **Format**:
+
 ```text
 <type>: <description>
 ```
 
 **Types**:
+
 - `feat:` - New features
 - `fix:` - Bug fixes
 - `docs:` - Documentation changes
@@ -147,6 +157,7 @@ cmd.exe /c command
 - `perf:` - Performance improvements
 
 **Atomic Commits** - One logical change per commit:
+
 ```bash
 # ✅ GOOD - Atomic commits
 git commit -m "fix: Correct semicolon placement"
@@ -169,6 +180,7 @@ git commit -m "fix: Multiple issues and update docs"
 **When to use**: Documentation that helps users configure, use, or understand features.
 
 **Examples**:
+
 - Setup guides
 - Quick reference cards
 - Configuration guides
@@ -180,6 +192,7 @@ git commit -m "fix: Multiple issues and update docs"
 **When to use**: Documentation for developers/contributors.
 
 **Examples**:
+
 - Architecture documentation
 - Testing strategies
 - Contribution guidelines
@@ -191,6 +204,7 @@ git commit -m "fix: Multiple issues and update docs"
 **When to use**: Documents about future plans, refactoring ideas, or outstanding work.
 
 **Examples**:
+
 - Refactoring plans
 - Roadmaps
 - TODOs and remaining issues
@@ -202,6 +216,7 @@ git commit -m "fix: Multiple issues and update docs"
 **When to use**: Preserving old documentation that's no longer current but has historical value.
 
 **Examples**:
+
 - Old design documents
 - Deprecated feature docs
 - Session summaries
@@ -210,6 +225,7 @@ git commit -m "fix: Multiple issues and update docs"
 #### ❌ NEVER Create Documentation at Root
 
 **Wrong**:
+
 ```
 project-root/
 ├── ANALYSIS.md        ❌ Wrong location
@@ -218,6 +234,7 @@ project-root/
 ```
 
 **Correct**:
+
 ```
 project-root/
 ├── docs/
@@ -306,6 +323,7 @@ project-root/
 ### Language-Specific Standards
 
 #### TypeScript/JavaScript
+
 - Use TypeScript strict mode
 - Prefer `const` over `let`, avoid `var`
 - Use meaningful variable names (no single letters except loop counters)
@@ -313,12 +331,14 @@ project-root/
 - Use async/await over callbacks
 
 #### Python
+
 - Follow PEP 8 style guide
 - Use type hints for function signatures
 - Write docstrings for public functions/classes
 - Prefer list comprehensions for simple transformations
 
 #### Shell Scripts
+
 - Use `set -euo pipefail` at the top
 - Quote all variables: `"$variable"`
 - Use `[[` instead of `[` for conditionals
@@ -351,50 +371,60 @@ project-root/
 ### Essential References
 
 **Commit & Versioning**:
+
 - [Conventional Commits](https://www.conventionalcommits.org/) - Commit message specification
 - [Semantic Versioning](https://semver.org/) - Version numbering (MAJOR.MINOR.PATCH)
 - [Keep a Changelog](https://keepachangelog.com/) - Changelog format
 
 **Git Workflows**:
+
 - [GitHub Flow](https://guides.github.com/introduction/flow/) - Simple branching workflow
 - [Git Flow](https://nvie.com/posts/a-successful-git-branching-model/) - Advanced branching model
 - [Trunk-Based Development](https://trunkbaseddevelopment.com/) - Alternative to feature branches
 
 **Code Quality & Style**:
+
 - [Google Style Guides](https://google.github.io/styleguide/) - Multi-language style guides
 - [Airbnb JavaScript Style Guide](https://github.com/airbnb/javascript) - JavaScript/React conventions
 - [PEP 8](https://pep8.org/) - Python style guide
 - [TypeScript Deep Dive](https://basarat.gitbook.io/typescript/) - TypeScript best practices
 
 **Documentation**:
+
 - [Write the Docs](https://www.writethedocs.org/) - Documentation community
 - [Markdown Guide](https://www.markdownguide.org/) - Markdown reference
 - [Google Documentation Guide](https://google.github.io/styleguide/docguide/) - Technical writing
 
 **Testing**:
+
 - [Test-Driven Development](https://testdriven.io/test-driven-development/) - TDD methodology
 - [AAA Pattern](https://automationpanda.com/2020/07/07/arrange-act-assert-a-pattern-for-writing-good-tests/) - Test structure
 - [F.I.R.S.T Principles](https://github.com/ghsukumar/SFDC_Best_Practices/wiki/F.I.R.S.T-Principles-of-Unit-Testing) - Unit testing principles
 
 **Code Review**:
+
 - [Google Code Review Guidelines](https://google.github.io/eng-practices/review/) - How to review code
 - [Conventional Comments](https://conventionalcomments.org/) - Code review comment format
 
 **API Design**:
+
 - [RESTful API Design](https://restfulapi.net/) - REST best practices
 - [OpenAPI Specification](https://swagger.io/specification/) - API documentation standard
 
 **Security**:
+
 - [OWASP Top 10](https://owasp.org/www-project-top-ten/) - Top security risks
 - [npm Security Best Practices](https://snyk.io/blog/ten-npm-security-best-practices/) - Node.js security
 
 **AI/LLM Resources**:
+
 - [GitHub Copilot Docs](https://docs.github.com/en/copilot) - Official Copilot documentation
 - [Prompt Engineering Guide](https://www.promptingguide.ai/) - Effective prompts
 - [Anthropic Claude Docs](https://docs.anthropic.com/) - Claude best practices
 - [Cursor Documentation](https://docs.cursor.com/) - Cursor AI IDE
 
 **Books**:
+
 - [Clean Code](https://www.amazon.com/Clean-Code-Handbook-Software-Craftsmanship/dp/0132350882) by Robert C. Martin
 - [The Pragmatic Programmer](https://pragprog.com/titles/tpp20/the-pragmatic-programmer-20th-anniversary-edition/) - Software practices
 - [Refactoring](https://martinfowler.com/books/refactoring.html) by Martin Fowler

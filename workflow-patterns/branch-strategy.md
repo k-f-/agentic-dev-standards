@@ -32,6 +32,7 @@ Use these prefixes for all branches:
 ### Good Branch Names
 
 ✅ **Good**:
+
 ```
 feature/oauth-integration
 bugfix/null-pointer-in-parser
@@ -42,6 +43,7 @@ hotfix/critical-security-patch
 ```
 
 ❌ **Bad**:
+
 ```
 my-branch                    # Too vague
 Fix                          # Not descriptive, wrong case
@@ -72,6 +74,7 @@ Deploy
 **Steps**:
 
 1. **Branch from main**:
+
    ```bash
    git checkout main
    git pull origin main
@@ -79,6 +82,7 @@ Deploy
    ```
 
 2. **Make changes** with atomic commits:
+
    ```bash
    git add .
    git commit -m "feat: Add user profile endpoint"
@@ -87,6 +91,7 @@ Deploy
    ```
 
 3. **Push to remote**:
+
    ```bash
    git push -u origin feature/user-profile
    ```
@@ -96,6 +101,7 @@ Deploy
 5. **Merge and deploy** after approval
 
 6. **Delete branch** after merge:
+
    ```bash
    git checkout main
    git pull origin main
@@ -103,11 +109,13 @@ Deploy
    ```
 
 **Pros**:
+
 - Simple and easy to understand
 - Always deployable main branch
 - Fast feedback loops
 
 **Cons**:
+
 - Not ideal for scheduled releases
 - Can be chaotic with many developers
 
@@ -128,6 +136,7 @@ hotfix/* (emergency fixes)
 ```
 
 **Branches**:
+
 - `main` - Production-ready code, tagged releases only
 - `develop` - Integration branch for features
 - `feature/*` - New features (branch from develop)
@@ -135,6 +144,7 @@ hotfix/* (emergency fixes)
 - `hotfix/*` - Critical production fixes (branch from main)
 
 **Feature Development**:
+
 ```bash
 # Start feature
 git checkout develop
@@ -152,6 +162,7 @@ git branch -d feature/new-feature
 ```
 
 **Release Process**:
+
 ```bash
 # Create release branch
 git checkout -b release/1.2.0 develop
@@ -172,6 +183,7 @@ git branch -d release/1.2.0
 ```
 
 **Hotfix Process**:
+
 ```bash
 # Create hotfix branch from main
 git checkout -b hotfix/1.2.1 main
@@ -191,11 +203,13 @@ git branch -d hotfix/1.2.1
 ```
 
 **Pros**:
+
 - Clear separation of concerns
 - Supports scheduled releases
 - Parallel development and releases
 
 **Cons**:
+
 - More complex than GitHub Flow
 - Can be overkill for simple projects
 
@@ -212,12 +226,14 @@ Direct commits to main (with feature flags)
 ```
 
 **Key Principles**:
+
 - Keep branches very short-lived (hours, not days)
 - Commit to main frequently
 - Use feature flags for incomplete features
 - Heavy reliance on automated testing
 
 **Not recommended for**:
+
 - AI-assisted development (harder to track changes)
 - Teams without extensive CI/CD
 
@@ -226,6 +242,7 @@ Direct commits to main (with feature flags)
 ### Creating Pull Requests
 
 **PR Title**: Use conventional commit format
+
 ```
 feat: Add user authentication system
 fix: Correct validation in profile update
@@ -311,6 +328,7 @@ Related to #38, #41
 | **Huge** | > 1000 | > 20 | > 2 hours | ❌ Too large, split it |
 
 **How to keep PRs small**:
+
 - One logical change per PR
 - Split large features into multiple PRs
 - Use feature flags for partial implementations
@@ -329,6 +347,7 @@ Related to #38, #41
    - Breaking changes
 
 2. **Use conventional comments**:
+
    ```
    **praise:** Excellent use of dependency injection here!
 
@@ -382,6 +401,7 @@ protection:
 ### Via GitHub UI
 
 Settings → Branches → Add rule → `main`:
+
 - ✅ Require pull request reviews before merging (1 approval)
 - ✅ Require status checks to pass before merging
   - ✅ Require branches to be up to date before merging
@@ -394,6 +414,7 @@ Settings → Branches → Add rule → `main`:
 ### Branch Context
 
 **Start of session**, AI should check:
+
 ```bash
 git branch --show-current  # What branch am I on?
 git status                 # What's changed?
@@ -401,6 +422,7 @@ git log -5 --oneline       # Recent commits
 ```
 
 **Provide context to AI**:
+
 ```
 We're on feature/user-authentication branch.
 Working on adding JWT-based authentication.
@@ -411,6 +433,7 @@ Need to: Add authentication middleware
 ### Branch Naming by AI
 
 When AI creates branches:
+
 ```bash
 # AI should ask first
 "I'll create a new feature branch for user authentication.
@@ -450,6 +473,7 @@ git branch -d feature/user-profile
 ### Scenario 2: Fixing a Bug During Feature Development
 
 **Option A: Fix in same branch** (if closely related):
+
 ```bash
 # On feature/new-ui
 git commit -m "feat: Add new dashboard layout"
@@ -457,6 +481,7 @@ git commit -m "fix: Correct sidebar alignment"
 ```
 
 **Option B: Separate bugfix branch** (if unrelated):
+
 ```bash
 # On feature/new-ui, noticed unrelated bug
 git stash  # Save current work
@@ -481,6 +506,7 @@ git stash pop
 **Problem**: Feature branch is 2 weeks old, main has moved forward
 
 **Solution**: Regularly sync with main
+
 ```bash
 # On feature/complex-feature
 git fetch origin
@@ -503,6 +529,7 @@ git push origin feature/complex-feature --force-with-lease
 ### Quick Reference
 
 **Branch naming**:
+
 ```
 feature/descriptive-name
 bugfix/specific-issue
@@ -513,11 +540,13 @@ chore/maintenance-task
 ```
 
 **Workflow choice**:
+
 - **Small team, rapid deployment** → GitHub Flow
 - **Scheduled releases, structured** → Git Flow
 - **Mature team, high automation** → Trunk-Based
 
 **PR guidelines**:
+
 - Keep PRs small (< 500 lines)
 - Use conventional commit format in title
 - Include comprehensive description
@@ -525,6 +554,7 @@ chore/maintenance-task
 - Respond to all feedback
 
 **Branch protection**:
+
 - Require PR reviews
 - Require status checks
 - No force pushes to main

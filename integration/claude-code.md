@@ -24,6 +24,7 @@ git submodule update --init --recursive
 ### 3. Configure Project Context
 
 Claude Code doesn't use a specific config file like `.cursorrules`. Instead, it reads from:
+
 - Project files and structure
 - README.md
 - Documentation in `docs/`
@@ -62,6 +63,7 @@ claude
 ```
 
 **First interaction**:
+
 ```
 You: "Please read docs/development/claude-code-context.md and the universal standards from agentic-dev-standards/"
 
@@ -126,12 +128,14 @@ claude "Create a new API endpoint for user profiles"
 ## Terminal Standards
 
 Claude Code **natively follows clean bash practices**. It automatically:
+
 - Uses clean shell environments
 - Avoids pagers (`git --no-pager`)
 - Uses absolute paths for core utilities
 - Combines commands efficiently
 
 **However**, you should still remind it:
+
 ```
 "Follow terminal-standards.md from agentic-dev-standards/ for all commands"
 ```
@@ -139,6 +143,7 @@ Claude Code **natively follows clean bash practices**. It automatically:
 ## Key Features
 
 **vs GitHub Copilot**:
+
 - ✅ Much better at autonomous multi-step tasks
 - ✅ Excellent codebase comprehension
 - ✅ Natural conversation interface
@@ -147,6 +152,7 @@ Claude Code **natively follows clean bash practices**. It automatically:
 - ❌ Terminal-only (no IDE integration)
 
 **vs Cursor**:
+
 - ✅ Better for complex autonomous tasks
 - ✅ More powerful context understanding
 - ✅ Terminal-first workflow
@@ -171,6 +177,7 @@ Confirm you've read all files and understand the standards."
 ### During Development
 
 **Leverage autonomous capabilities**:
+
 ```
 "Implement feature X following all universal standards.
 Break it into atomic commits.
@@ -178,6 +185,7 @@ Create session summary when complete."
 ```
 
 **Track progress**:
+
 ```
 "Show current status: branch, commits, pending tasks"
 ```
@@ -263,6 +271,7 @@ Claude Code has excellent git integration:
 ### Claude not following standards
 
 **Solution**: Explicitly reference files:
+
 ```
 "Follow the standards in:
 - agentic-dev-standards/terminal-standards.md
@@ -272,11 +281,13 @@ Claude Code has excellent git integration:
 ### Context not persisted between sessions
 
 **Solution**: Create session summary at end of each session:
+
 ```
 "Create session summary following workflow-patterns/session-management.md"
 ```
 
 Next session, reference it:
+
 ```
 "Read the latest session summary from docs/archive/session-summaries/"
 ```
@@ -284,6 +295,7 @@ Next session, reference it:
 ### Commands failing
 
 **Solution**: Claude Code handles terminal well, but verify:
+
 ```
 "Use clean bash wrapper from terminal-standards.md"
 "Never use pagers - always use git --no-pager"
@@ -313,6 +325,7 @@ Follow universal standards from `agentic-dev-standards/`, with these project-spe
 ```
 
 Then:
+
 ```
 You: "Add new feature X following docs/development/workflows/new-feature.md"
 ```
@@ -330,6 +343,7 @@ You: "Deploy current branch to staging"
 ## Summary
 
 **Key Strengths**:
+
 - Autonomous multi-step workflows
 - Excellent codebase understanding
 - Natural terminal-first interaction
@@ -337,17 +351,20 @@ You: "Deploy current branch to staging"
 - Follows standards well when instructed
 
 **Setup**:
+
 - Add `agentic-dev-standards` submodule
 - Create `docs/development/claude-code-context.md`
 - Reference standards at session start
 
 **Usage Pattern**:
+
 1. Start session: `claude`
 2. Load context: "Read standards from agentic-dev-standards/"
 3. Work autonomously: "Implement feature X following all standards"
 4. End session: "Create session summary"
 
 **Best For**:
+
 - Complex multi-file refactorings
 - Feature implementation end-to-end
 - Codebase analysis and understanding
@@ -357,6 +374,7 @@ You: "Deploy current branch to staging"
 ---
 
 For universal standards applicable to all tools:
+
 - [`universal-agent-rules.md`](../universal-agent-rules.md)
 - [`terminal-standards.md`](../terminal-standards.md)
 - [`commit-conventions.md`](../commit-conventions.md)

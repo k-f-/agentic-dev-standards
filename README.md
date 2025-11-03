@@ -61,6 +61,7 @@ git submodule update --init --recursive
 Create your tool's configuration file and reference these standards:
 
 **GitHub Copilot** - Create `.github/copilot-instructions.md`:
+
 ```markdown
 # GitHub Copilot Instructions for [Your Project]
 
@@ -77,6 +78,7 @@ Create your tool's configuration file and reference these standards:
 ```
 
 **Cursor** - Create `.cursorrules`:
+
 ```markdown
 # Cursor Rules for [Your Project]
 
@@ -92,6 +94,7 @@ Create your tool's configuration file and reference these standards:
 ### 4. Start Using AI Assistance
 
 Your AI assistant will now:
+
 - ✅ Use clean bash environments (no user aliases, predictable behavior)
 - ✅ Follow Conventional Commits (feat:, fix:, docs:, etc.)
 - ✅ Make atomic commits (one logical change per commit)
@@ -104,11 +107,13 @@ Your AI assistant will now:
 **Problem**: User shell customizations (aliases, prompts, slow configs) break AI assumptions and waste tokens.
 
 **Solution**: All AI agents use clean, minimal bash:
+
 ```bash
 PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --noprofile --norc -c 'command'
 ```
 
 **Benefits**:
+
 - Predictable command behavior
 - No alias interference (`cat` → `bat`, `ls` → `exa`)
 - Faster execution (no slow shell frameworks)
@@ -128,6 +133,7 @@ test: Add integration tests
 ```
 
 **Benefits**:
+
 - Clean git history
 - Automated changelog generation
 - Easy rollback of specific changes
@@ -175,6 +181,7 @@ AI assistants will automatically use the updated standards.
 ### Single Source of Truth
 
 **Before** (duplicated everywhere):
+
 ```
 project-a/.github/copilot-instructions.md (500 lines)
 project-b/.github/copilot-instructions.md (500 lines)
@@ -183,6 +190,7 @@ project-c/.cursorrules (450 lines)
 ```
 
 **After** (one source of truth):
+
 ```
 project-a/.github/copilot-instructions.md (50 lines) → references submodule
 project-b/.github/copilot-instructions.md (50 lines) → references submodule
@@ -311,6 +319,7 @@ See [LICENSE](LICENSE) file for details.
 ### Q: Which AI tool should I use?
 
 **A**: Depends on your workflow:
+
 - **IDE-first, want completion + chat**: GitHub Copilot or Cursor
 - **Terminal-first, complex tasks**: Claude Code
 - **Open-source, customizable**: Continue
@@ -335,6 +344,7 @@ See [LICENSE](LICENSE) file for details.
 ### Q: What if standards change and break my workflow?
 
 **A**: Submodule pins to specific commit. Update when ready:
+
 ```bash
 cd agentic-dev-standards
 git checkout v2.1.0  # or specific commit

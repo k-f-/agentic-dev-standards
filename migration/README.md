@@ -29,6 +29,7 @@ This guide helps you migrate from tool-specific instructions to universal standa
 3. **Extract universal rules** (if you have custom ones):
 
    If you have universal patterns not in this repo:
+
    ```bash
    cd agentic-dev-standards
    # Edit files to add your patterns
@@ -39,6 +40,7 @@ This guide helps you migrate from tool-specific instructions to universal standa
 4. **Refactor `.github/copilot-instructions.md`**:
 
    **Old** (everything in one file):
+
    ```markdown
    # Copilot Instructions
 
@@ -53,6 +55,7 @@ This guide helps you migrate from tool-specific instructions to universal standa
    ```
 
    **New** (references universal standards):
+
    ```markdown
    # GitHub Copilot Instructions for [Project]
 
@@ -101,6 +104,7 @@ This guide helps you migrate from tool-specific instructions to universal standa
 2. **Refactor `.cursorrules`**:
 
    **Old**:
+
    ```markdown
    # Cursor Rules
 
@@ -112,6 +116,7 @@ This guide helps you migrate from tool-specific instructions to universal standa
    ```
 
    **New**:
+
    ```markdown
    # Cursor Rules for [Project]
 
@@ -136,6 +141,7 @@ This guide helps you migrate from tool-specific instructions to universal standa
 ### Scenario 3: From Multiple Tool-Specific Files to Unified Standards
 
 **Before**: You support multiple tools but duplicate rules in each config:
+
 ```
 .github/copilot-instructions.md (500 lines)
 .cursorrules (450 lines)
@@ -144,6 +150,7 @@ This guide helps you migrate from tool-specific instructions to universal standa
 ```
 
 **After**: Single source of truth:
+
 ```
 .github/copilot-instructions.md (50 lines - references submodule)
 .cursorrules (50 lines - references submodule)
@@ -172,6 +179,7 @@ agentic-dev-standards/ (submodule - 1 source of truth)
 1. **Choose your tool(s)**: GitHub Copilot, Cursor, Claude Code, Windsurf, or Continue
 
 2. **Add submodule**:
+
    ```bash
    git submodule add https://github.com/k-f-/agentic-dev-standards.git
    ```
@@ -192,6 +200,7 @@ agentic-dev-standards/ (submodule - 1 source of truth)
 ### Scenario 5: From v1.x to v2.x of These Standards
 
 **Changes in v2.0**:
+
 - Renamed files to remove "copilot" branding
 - Split large file into focused modules
 - Added integration guides for multiple tools
@@ -200,6 +209,7 @@ agentic-dev-standards/ (submodule - 1 source of truth)
 **Migration Steps**:
 
 1. **Update submodule**:
+
    ```bash
    cd agentic-dev-standards
    git pull origin main
@@ -209,6 +219,7 @@ agentic-dev-standards/ (submodule - 1 source of truth)
 2. **Update references in your tool configs**:
 
    **Old references**:
+
    ```markdown
    Read copilot-best-practices.md
    Read copilot-terminal-config.md
@@ -216,6 +227,7 @@ agentic-dev-standards/ (submodule - 1 source of truth)
    ```
 
    **New references**:
+
    ```markdown
    Read agentic-dev-standards/terminal-standards.md
    Read agentic-dev-standards/commit-conventions.md
@@ -225,6 +237,7 @@ agentic-dev-standards/ (submodule - 1 source of truth)
 3. **Optionally: Use new workflow-patterns**:
 
    Add to your tool config:
+
    ```markdown
    Workflow guidance:
    - agentic-dev-standards/workflow-patterns/session-management.md
@@ -234,6 +247,7 @@ agentic-dev-standards/ (submodule - 1 source of truth)
    ```
 
 4. **Commit**:
+
    ```bash
    git add agentic-dev-standards .github/copilot-instructions.md
    git commit -m "chore: Update agentic-dev-standards to v2.0"
@@ -246,6 +260,7 @@ agentic-dev-standards/ (submodule - 1 source of truth)
 **File to update**: `.github/copilot-instructions.md`
 
 **Before**:
+
 ```markdown
 # GitHub Copilot Instructions
 
@@ -253,6 +268,7 @@ agentic-dev-standards/ (submodule - 1 source of truth)
 ```
 
 **After**:
+
 ```markdown
 # GitHub Copilot Instructions for [Project]
 
@@ -292,6 +308,7 @@ See [full guide →](../integration/windsurf.md)
 **File to update**: `.continue/config.json`
 
 **Before**:
+
 ```json
 {
   "systemMessage": "[Long duplicated instructions]"
@@ -299,6 +316,7 @@ See [full guide →](../integration/windsurf.md)
 ```
 
 **After**:
+
 ```json
 {
   "systemMessage": "Follow standards from agentic-dev-standards/: terminal-standards.md, commit-conventions.md, universal-agent-rules.md",
@@ -350,6 +368,7 @@ See [full guide →](../integration/continue.md)
 **Problem**: Breaking AI assistant functionality.
 
 **Solution**: Always test with your tool after migration:
+
 - Ask AI to confirm it read universal standards
 - Request a commit following conventions
 - Run a terminal command and verify bash wrapper used
@@ -359,6 +378,7 @@ See [full guide →](../integration/continue.md)
 **Problem**: Deleting valuable custom rules during migration.
 
 **Solution**: Before deleting anything:
+
 1. Review all existing rules
 2. Identify which are universal (contribute back!)
 3. Keep project-specific rules in tool config
@@ -375,18 +395,21 @@ See [full guide →](../integration/continue.md)
 If migration causes issues:
 
 1. **Revert submodule**:
+
    ```bash
    git submodule deinit agentic-dev-standards
    git rm agentic-dev-standards
    ```
 
 2. **Restore old config**:
+
    ```bash
    git checkout HEAD~1 .github/copilot-instructions.md
    # or .cursorrules, .windsurfrules, etc.
    ```
 
 3. **Commit rollback**:
+
    ```bash
    git commit -m "revert: Rollback universal standards migration"
    ```
@@ -415,6 +438,7 @@ If migration causes issues:
 ## Summary
 
 **Migration Path**:
+
 1. Add submodule
 2. Identify universal vs project-specific
 3. Extract universal (contribute back!)
@@ -424,6 +448,7 @@ If migration causes issues:
 7. Commit
 
 **Benefits After Migration**:
+
 - ✅ Single source of truth for universal standards
 - ✅ Easy to update standards across all projects
 - ✅ Support multiple AI tools without duplication
@@ -431,6 +456,7 @@ If migration causes issues:
 - ✅ Contribute to and benefit from community standards
 
 **Next Steps**:
+
 - Choose your migration scenario above
 - Follow step-by-step instructions
 - Test thoroughly
