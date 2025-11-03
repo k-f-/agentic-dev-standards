@@ -9,10 +9,12 @@ Continue is an open-source AI coding assistant that works as a VSCode/JetBrains 
 ### 1. Install Continue Extension
 
 **VSCode**:
+
 - Install "Continue" extension from marketplace
 - Or: Cmd+P → `ext install Continue.continue`
 
 **JetBrains** (IntelliJ, PyCharm, etc.):
+
 - Install "Continue" plugin from marketplace
 
 ### 2. Add Submodule
@@ -133,6 +135,7 @@ git commit -m "chore: Configure Continue with universal standards"
 1. **Open Continue sidebar** (icon in activity bar)
 2. **Select model** from dropdown
 3. **Chat with AI**:
+
    ```
    "Read the universal standards from agentic-dev-standards/.
    Then help me implement user authentication."
@@ -141,6 +144,7 @@ git commit -m "chore: Configure Continue with universal standards"
 ### Context Providers
 
 Continue automatically includes context from:
+
 - **Current file**
 - **Open files**
 - **Docs folders** (configured in `contextProviders`)
@@ -162,12 +166,14 @@ Continue provides inline completions similar to Copilot (if configured).
 ## Key Features
 
 **Open Source**:
+
 - ✅ Free to use
 - ✅ Self-hosted option
 - ✅ Customizable
 - ✅ Multi-provider support
 
 **vs Proprietary Tools**:
+
 - ✅ Bring your own API keys (cheaper)
 - ✅ Support for local models (Ollama, LM Studio)
 - ✅ Highly configurable
@@ -247,21 +253,25 @@ Continue provides inline completions similar to Copilot (if configured).
 ## Best Practices
 
 **Use `systemMessage` for standards**:
+
 - Reference universal standards in system message
 - Continue will always have this context
 - No need to repeat in every chat
 
 **Configure context providers**:
+
 - Include `agentic-dev-standards/` folder
 - Include project-specific docs
 - Explicit files for critical standards
 
 **Use API keys wisely**:
+
 - Store in `.continue/config.json` (gitignored)
 - Or use environment variables
 - Provide `.continue/config.json.example` for team
 
 **Multiple models**:
+
 - Fast model (GPT-3.5) for autocomplete
 - Powerful model (GPT-4, Claude) for chat
 - Local model for offline work
@@ -271,6 +281,7 @@ Continue provides inline completions similar to Copilot (if configured).
 ### Continue not reading standards
 
 **Solution**: Ensure standards are in context providers:
+
 ```json
 {
   "contextProviders": [
@@ -285,6 +296,7 @@ Continue provides inline completions similar to Copilot (if configured).
 ```
 
 Or reference explicitly:
+
 ```
 "Read agentic-dev-standards/terminal-standards.md"
 ```
@@ -292,6 +304,7 @@ Or reference explicitly:
 ### API keys not working
 
 **Solution**:
+
 - Verify API key is valid
 - Check provider name matches (openai, anthropic, etc.)
 - Ensure no extra whitespace in API key
@@ -300,6 +313,7 @@ Or reference explicitly:
 ### Autocomplete not working
 
 **Solution**: Enable in config:
+
 ```json
 {
   "enableTabAutocomplete": true,
@@ -331,6 +345,7 @@ Use Continue with local models (no API costs):
 ```
 
 **Prerequisites**:
+
 - Install [Ollama](https://ollama.ai/)
 - Pull model: `ollama pull codellama:34b`
 - Ollama running: `ollama serve`
@@ -356,12 +371,14 @@ my-project/
 ## Summary
 
 **Key Files**:
+
 - `.continue/config.json` - Continue configuration (gitignore if has API keys)
 - `.continue/config.json.example` - Template for team
 - `.vscode/settings.json` - Terminal config
 - `agentic-dev-standards/` - Universal standards
 
 **Advantages**:
+
 - Open source
 - Multi-provider support
 - Bring your own API keys
@@ -369,12 +386,14 @@ my-project/
 - Highly customizable
 
 **Best For**:
+
 - Cost-conscious developers
 - Open-source enthusiasts
 - Teams wanting flexibility
 - Offline/local model usage
 
 **Setup**:
+
 1. Install Continue extension
 2. Add `agentic-dev-standards` submodule
 3. Create `.continue/config.json` with context providers
@@ -383,6 +402,7 @@ my-project/
 ---
 
 For universal standards applicable to all tools:
+
 - [`universal-agent-rules.md`](../universal-agent-rules.md)
 - [`terminal-standards.md`](../terminal-standards.md)
 - [`commit-conventions.md`](../commit-conventions.md)

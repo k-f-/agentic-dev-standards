@@ -42,6 +42,7 @@ This directory contains integration guides for various AI coding assistants. Eac
 **Best for**: VSCode users already in GitHub ecosystem
 
 **Setup**:
+
 1. Install GitHub Copilot extension
 2. Add this repo as submodule
 3. Create `.github/copilot-instructions.md`
@@ -54,6 +55,7 @@ This directory contains integration guides for various AI coding assistants. Eac
 **Best for**: Developers wanting AI-first IDE with excellent multi-file editing
 
 **Setup**:
+
 1. Download Cursor IDE
 2. Add this repo as submodule
 3. Create `.cursorrules` file
@@ -66,6 +68,7 @@ This directory contains integration guides for various AI coding assistants. Eac
 **Best for**: Terminal-first developers, autonomous workflows, automation
 
 **Setup**:
+
 1. Install Claude CLI
 2. Add this repo as submodule
 3. Configure project context
@@ -78,6 +81,7 @@ This directory contains integration guides for various AI coding assistants. Eac
 **Best for**: VSCode-like experience with enhanced AI features (Cascade mode)
 
 **Setup**:
+
 1. Download Windsurf IDE
 2. Add this repo as submodule
 3. Create `.windsurfrules` file
@@ -90,6 +94,7 @@ This directory contains integration guides for various AI coding assistants. Eac
 **Best for**: Open-source enthusiasts, custom configurations, multi-provider support
 
 **Setup**:
+
 1. Install Continue extension (VSCode or JetBrains)
 2. Add this repo as submodule
 3. Configure in `config.json`
@@ -104,6 +109,7 @@ Regardless of which tool you use, these standards apply:
 ### 1. Terminal Standards
 
 **All tools must use clean bash environment**:
+
 ```bash
 PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --noprofile --norc -c 'command'
 ```
@@ -113,6 +119,7 @@ See [`terminal-standards.md`](../terminal-standards.md) for complete details.
 ### 2. Commit Conventions
 
 **All tools must use Conventional Commits**:
+
 ```
 feat: Add new feature
 fix: Correct bug
@@ -124,6 +131,7 @@ See [`commit-conventions.md`](../commit-conventions.md) for complete details.
 ### 3. Documentation Organization
 
 **All tools must follow standard doc organization**:
+
 ```
 docs/
 ├── setup/              # User-facing docs
@@ -138,35 +146,40 @@ See [`universal-agent-rules.md`](../universal-agent-rules.md) for complete detai
 
 ### When to Choose Each Tool
 
-#### Choose GitHub Copilot if:
+#### Choose GitHub Copilot if
+
 - ✅ You're already using VSCode
 - ✅ You're heavily integrated with GitHub
 - ✅ You primarily need code completion (not chat)
 - ✅ You want the simplest setup
 - ❌ You don't need multi-file autonomous editing
 
-#### Choose Cursor if:
+#### Choose Cursor if
+
 - ✅ You want best-in-class multi-file editing
 - ✅ You like the Composer/agent mode
 - ✅ You want model flexibility (GPT-4, Claude, etc.)
 - ✅ You prefer AI-first IDE design
 - ❌ You're not willing to switch from VSCode
 
-#### Choose Claude Code if:
+#### Choose Claude Code if
+
 - ✅ You work primarily in the terminal
 - ✅ You need autonomous agent workflows
 - ✅ You want powerful context awareness
 - ✅ You prefer CLI over IDE
 - ❌ You need inline code completion
 
-#### Choose Windsurf if:
+#### Choose Windsurf if
+
 - ✅ You want VSCode-like experience with better AI
 - ✅ You like Cascade mode for complex tasks
 - ✅ You want good balance of completion and chat
 - ✅ You're willing to try newer tool
 - ❌ You need the most mature ecosystem
 
-#### Choose Continue if:
+#### Choose Continue if
+
 - ✅ You prefer open-source software
 - ✅ You want to use your own API keys
 - ✅ You need custom configurations
@@ -235,6 +248,7 @@ company-projects/
 **Symptoms**: AI doesn't follow standards despite configuration.
 
 **Solutions**:
+
 - **GitHub Copilot**: Ensure file is `.github/copilot-instructions.md` (exact name)
 - **Cursor**: Ensure file is `.cursorrules` at project root
 - **Windsurf**: Ensure file is `.windsurfrules` at project root
@@ -246,6 +260,7 @@ company-projects/
 **Symptoms**: Commands work manually but fail when AI runs them.
 
 **Solutions**:
+
 - Verify bash wrapper is used (see `terminal-standards.md`)
 - Check PATH is correctly set
 - Ensure no pagers are triggered (`git --no-pager`)
@@ -256,6 +271,7 @@ company-projects/
 **Symptoms**: Changes to universal standards don't appear in projects.
 
 **Solutions**:
+
 ```bash
 # Update submodule to latest
 cd agentic-dev-standards
@@ -273,6 +289,7 @@ git submodule update --remote --merge
 **Symptoms**: Same instruction interpreted differently by different tools.
 
 **Solutions**:
+
 - Keep tool-specific configs minimal
 - Put all universal logic in `agentic-dev-standards/`
 - Use explicit references to standard files
@@ -303,6 +320,7 @@ Found a better integration pattern? Have a guide for a new tool?
 ## Summary
 
 **Key Takeaways**:
+
 1. Choose tool based on your workflow (IDE vs terminal, completion vs chat)
 2. All tools can use the same universal standards via submodule
 3. Keep tool-specific configs minimal, universal logic in submodule
@@ -310,6 +328,7 @@ Found a better integration pattern? Have a guide for a new tool?
 5. Test integration with your chosen tool(s) before committing
 
 **Next Steps**:
+
 1. Choose your tool(s) from the list above
 2. Follow the tool-specific setup guide
 3. Add `agentic-dev-standards` as submodule

@@ -13,11 +13,13 @@ Before adding ANY new dependency, evaluate these factors:
 #### 1. ✅ Is It Necessary?
 
 **Questions to ask**:
+
 - Can I implement this myself in < 100 lines?
 - Does the added complexity justify the benefit?
 - Am I adding this just to avoid writing a few lines of code?
 
 **When to implement yourself**:
+
 ```javascript
 // ❌ Don't add a dependency for this
 import isOdd from 'is-odd'
@@ -29,6 +31,7 @@ const result = isOdd(5)
 ```
 
 **When to use a dependency**:
+
 ```javascript
 // ✅ Use a dependency for complex functionality
 import jwt from 'jsonwebtoken'
@@ -39,18 +42,21 @@ const token = jwt.sign({ userId: 123 }, secret, { expiresIn: '1h' })
 #### 2. ✅ Is It Actively Maintained?
 
 **Check**:
+
 - Last commit date (< 6 months ago is good)
 - GitHub activity (issues being addressed, PRs being merged)
 - Release frequency (regular updates indicate active maintenance)
 - Number of contributors (more is generally better)
 
 **Red flags**:
+
 - ⚠️ No commits in > 1 year
 - ⚠️ Many open issues with no responses
 - ⚠️ Deprecated warnings on npm
 - ⚠️ Single contributor who's inactive
 
 **How to check**:
+
 ```bash
 # View package info
 npm view <package-name>
@@ -66,17 +72,20 @@ npm view <package-name>
 #### 3. ✅ What's the License?
 
 **Compatible licenses** (for most projects):
+
 - ✅ MIT - Very permissive
 - ✅ Apache 2.0 - Permissive with patent grant
 - ✅ BSD (2-Clause, 3-Clause) - Permissive
 - ✅ ISC - Similar to MIT
 
 **Incompatible licenses** (check with legal):
+
 - ⚠️ GPL - Requires your code to be GPL (viral)
 - ⚠️ AGPL - More restrictive than GPL
 - ⚠️ Custom licenses - Need careful review
 
 **How to check**:
+
 ```bash
 # Check license
 npm view <package-name> license
@@ -88,11 +97,13 @@ npx license-checker --summary
 #### 4. ✅ What's the Bundle Size Impact?
 
 **Size matters** for web applications:
+
 - Frontend apps: Every KB affects load time
 - Backend apps: Less critical but still important
 - CLI tools: Can affect startup time
 
 **How to check**:
+
 ```bash
 # Analyze bundle size impact
 npx bundlephobia <package-name>
@@ -110,6 +121,7 @@ npx bundlephobia <package-name>
 | Huge | > 500 KB | ❌ Avoid if possible |
 
 **Example**:
+
 ```bash
 $ npx bundlephobia lodash
 # lodash: 527 KB (minified)
@@ -123,6 +135,7 @@ $ npx bundlephobia date-fns
 #### 5. ✅ Are There Security Vulnerabilities?
 
 **How to check**:
+
 ```bash
 # Check specific package
 npm audit <package-name>
@@ -135,12 +148,14 @@ npm audit --json
 ```
 
 **Vulnerability severity**:
+
 - **Critical**: Fix immediately, consider alternatives
 - **High**: Fix soon, evaluate alternatives
 - **Moderate**: Fix when convenient
 - **Low**: Monitor, fix in regular updates
 
 **Red flags**:
+
 - ⚠️ Critical vulnerabilities in latest version
 - ⚠️ Unmaintained packages with known vulnerabilities
 - ⚠️ Dependencies with bad security track record
@@ -148,6 +163,7 @@ npm audit --json
 #### 6. ✅ How Many Dependencies Does It Have?
 
 **Dependency tree matters**:
+
 ```bash
 # View dependency tree
 npm ls <package-name>
@@ -165,6 +181,7 @@ npm ls <package-name> --all | wc -l
 | > 50 | ❌ Very heavy, likely unnecessary |
 
 **Example**:
+
 ```bash
 # Good: minimal dependencies
 $ npm ls date-fns
@@ -181,6 +198,7 @@ moment@2.29.4
 #### 7. ✅ Is There a Better Alternative?
 
 **Compare options**:
+
 ```bash
 # Compare on npm trends
 # Visit: https://npmtrends.com/package-a-vs-package-b-vs-package-c
@@ -251,11 +269,13 @@ Or create `docs/development/dependencies.md`:
 
 1. **Evaluate using checklist above**
 2. **Install as exact version** (for critical dependencies):
+
    ```bash
    npm install --save-exact <package-name>
    ```
 
 3. **Or install with caret** (for less critical):
+
    ```bash
    npm install <package-name>
    ```
@@ -263,17 +283,20 @@ Or create `docs/development/dependencies.md`:
 4. **Document the decision** (see above)
 
 5. **Run security audit**:
+
    ```bash
    npm audit
    ```
 
 6. **Test thoroughly**:
+
    ```bash
    npm test
    npm run build
    ```
 
 7. **Commit with conventional commit**:
+
    ```bash
    git add package.json package-lock.json
    git commit -m "chore: Add jsonwebtoken for JWT authentication
@@ -287,6 +310,7 @@ Or create `docs/development/dependencies.md`:
 ### Development vs Production Dependencies
 
 **Production dependencies** (`dependencies`):
+
 - Required for the app to run
 - Included in production bundle
 - Examples: express, react, database drivers
@@ -296,6 +320,7 @@ npm install <package>
 ```
 
 **Development dependencies** (`devDependencies`):
+
 - Only needed during development/build
 - NOT included in production
 - Examples: testing tools, build tools, linters
@@ -327,6 +352,7 @@ npm install -D <package>
 ### Regular Update Schedule
 
 **Recommended schedule**:
+
 - **Patch updates** (e.g., 1.2.3 → 1.2.4): Weekly or bi-weekly
 - **Minor updates** (e.g., 1.2.0 → 1.3.0): Monthly
 - **Major updates** (e.g., 1.0.0 → 2.0.0): Quarterly, with careful testing
@@ -347,6 +373,7 @@ npx npm-check --update-all
 ### Update Process
 
 **For patch/minor updates**:
+
 ```bash
 # Update specific package
 npm update <package-name>
@@ -360,6 +387,7 @@ git commit -m "chore: Update dependencies (patch/minor updates)"
 ```
 
 **For major updates**:
+
 ```bash
 # Check what would change
 npx npm-check-updates --target major
@@ -401,10 +429,12 @@ npm install <package-name>@latest
 ```
 
 **Process**:
+
 1. Run `npm audit` regularly (weekly)
 2. Fix critical/high vulnerabilities immediately
 3. Fix moderate/low vulnerabilities in regular updates
 4. Document what was fixed:
+
    ```bash
    git commit -m "security: Update lodash to fix prototype pollution
 
@@ -418,6 +448,7 @@ npm install <package-name>@latest
 ### Why Lock Files Matter
 
 **package-lock.json** (or yarn.lock, pnpm-lock.yaml) ensures:
+
 - ✅ Reproducible installs across machines
 - ✅ Same versions in dev, CI, and production
 - ✅ Protection against supply chain attacks
@@ -426,12 +457,14 @@ npm install <package-name>@latest
 ### Lock File Best Practices
 
 1. **Always commit lock files**:
+
    ```bash
    git add package.json package-lock.json
    git commit -m "chore: Add dependency"
    ```
 
 2. **Never manually edit lock files**:
+
    ```bash
    # ❌ Wrong
    vim package-lock.json
@@ -441,6 +474,7 @@ npm install <package-name>@latest
    ```
 
 3. **Regenerate if corrupted**:
+
    ```bash
    rm package-lock.json
    npm install
@@ -449,6 +483,7 @@ npm install <package-name>@latest
    ```
 
 4. **Use `npm ci` in CI/CD** (not `npm install`):
+
    ```bash
    # In CI/CD pipelines
    npm ci  # Installs exact versions from lock file
@@ -459,18 +494,21 @@ npm install <package-name>@latest
 ### Regular Maintenance Tasks
 
 **Monthly**:
+
 - [ ] Run `npm outdated` to check for updates
 - [ ] Update patch and minor versions
 - [ ] Run `npm audit` for security issues
 - [ ] Review and remove unused dependencies
 
 **Quarterly**:
+
 - [ ] Evaluate major version updates
 - [ ] Review dependency tree for bloat
 - [ ] Check for deprecated packages
 - [ ] Update documentation of why dependencies are needed
 
 **Annually**:
+
 - [ ] Full dependency audit
 - [ ] Re-evaluate if each dependency is still necessary
 - [ ] Consider replacing heavy dependencies with lighter alternatives
@@ -497,12 +535,14 @@ git commit -m "chore: Remove unused dependencies
 ### ❌ Pitfall 1: Adding Dependencies Too Easily
 
 **Bad**:
+
 ```bash
 # Need to check if string is odd
 npm install is-odd
 ```
 
 **Good**:
+
 ```javascript
 // Just implement it
 const isOdd = (n) => n % 2 !== 0
@@ -511,6 +551,7 @@ const isOdd = (n) => n % 2 !== 0
 ### ❌ Pitfall 2: Using Deprecated Packages
 
 **Bad**:
+
 ```json
 {
   "dependencies": {
@@ -520,6 +561,7 @@ const isOdd = (n) => n % 2 !== 0
 ```
 
 **Good**:
+
 ```json
 {
   "dependencies": {
@@ -531,6 +573,7 @@ const isOdd = (n) => n % 2 !== 0
 ### ❌ Pitfall 3: Ignoring Bundle Size
 
 **Bad**:
+
 ```javascript
 // Importing entire lodash (527 KB)
 import _ from 'lodash'
@@ -538,6 +581,7 @@ const result = _.chunk([1,2,3,4], 2)
 ```
 
 **Good**:
+
 ```javascript
 // Import only what you need
 import chunk from 'lodash-es/chunk'
@@ -553,6 +597,7 @@ const chunk = (arr, size) =>
 ### ❌ Pitfall 4: Not Reading Documentation
 
 **Always read**:
+
 - README
 - CHANGELOG (especially for major updates)
 - Migration guides (for major version updates)
@@ -561,6 +606,7 @@ const chunk = (arr, size) =>
 ### ❌ Pitfall 5: Updating Everything at Once
 
 **Bad**:
+
 ```bash
 # Update all to latest (including major versions)
 npx npm-check-updates -u
@@ -569,6 +615,7 @@ npm install
 ```
 
 **Good**:
+
 ```bash
 # Update incrementally
 npm update  # Only patch/minor
@@ -585,6 +632,7 @@ npm install react@latest
 ### When AI Suggests Dependencies
 
 **AI should**:
+
 1. Explain why the dependency is needed
 2. Provide alternatives considered
 3. Show bundle size impact
@@ -593,6 +641,7 @@ npm install react@latest
 6. Ask user for approval before installing
 
 **Example**:
+
 ```
 AI: "To implement JWT authentication, I recommend adding 'jsonwebtoken'.
 

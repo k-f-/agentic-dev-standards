@@ -31,6 +31,7 @@ Effective issue management helps track work, communicate with team members, and 
 ### Why This Matters
 
 **Problem**: Attempting to use non-existent labels causes `gh issue create` to fail with cryptic errors like:
+
 ```
 could not add label: 'formatter' not found
 ```
@@ -117,6 +118,7 @@ JOIN orders o -- order table
 ```
 
 **Actual Behavior**:
+
 ```sql
 SELECT *
 FROM users u-- user table
@@ -124,6 +126,7 @@ JOIN orders o-- order table
 ```
 
 **Steps to Reproduce**:
+
 1. Format SQL with FROM clause containing inline comment
 2. Observe missing space before comment
 
@@ -131,6 +134,7 @@ JOIN orders o-- order table
 Add space preservation logic in alias alignment pass.
 
 **Related Files**:
+
 - `src/formatter/alias-alignment.ts`
 - `tests/alias-alignment.test.ts`
 EOF
@@ -139,8 +143,10 @@ EOF
   --assignee "@me"
 
 # Step 4: Capture issue number
+
 ISSUE_NUM=$(gh issue list --limit 1 --json number --jq '.[0].number')
 echo "Created issue #$ISSUE_NUM"
+
 ```
 
 ### Issue Template
@@ -224,6 +230,7 @@ gh issue comment 42 --body "Working on this now"
 ### Closing Issues
 
 **Via commit message** (automatic):
+
 ```bash
 git commit -m "fix: Correct alias alignment (closes #42)"
 # or
@@ -233,11 +240,13 @@ git commit -m "docs: Update README (resolves #15)"
 ```
 
 Keywords that close issues:
+
 - `close`, `closes`, `closed`
 - `fix`, `fixes`, `fixed`
 - `resolve`, `resolves`, `resolved`
 
 **Via GitHub CLI**:
+
 ```bash
 # Close with comment
 gh issue close 42 --comment "Fixed in PR #45"
@@ -463,6 +472,7 @@ Related to #
 ### When AI Creates Issues
 
 **AI should**:
+
 1. Check existing labels first: `gh label list`
 2. Create missing labels if needed
 3. Use proper issue template
@@ -470,6 +480,7 @@ Related to #
 5. Assign appropriate labels and assignees
 
 **Example**:
+
 ```
 AI: "I found a bug in the validation logic. Should I create an issue for this?"
 User: "Yes, please."
@@ -486,6 +497,7 @@ AI: "Created issue #47: Fix validation logic for empty strings"
 ### When AI Works on Issues
 
 **AI should**:
+
 1. Reference issue number in commits: `fix: ... (relates to #47)`
 2. Close issues in final commit: `fix: ... (closes #47)`
 3. Update issue with progress comments
@@ -521,6 +533,7 @@ gh project list
 ### For Issue Creation
 
 ✅ **Do**:
+
 - Check labels exist first
 - Use descriptive titles
 - Include reproduction steps for bugs
@@ -529,6 +542,7 @@ gh project list
 - Include code examples or screenshots
 
 ❌ **Don't**:
+
 - Create vague issues ("fix bug")
 - Forget to check for existing similar issues
 - Use non-existent labels
@@ -537,6 +551,7 @@ gh project list
 ### For Pull Requests
 
 ✅ **Do**:
+
 - Link to related issues
 - Keep PRs small and focused
 - Include comprehensive description
@@ -545,6 +560,7 @@ gh project list
 - Update documentation
 
 ❌ **Don't**:
+
 - Create huge PRs (> 1000 lines)
 - Skip the PR template
 - Force-push during active review
@@ -570,6 +586,7 @@ See `terminal-standards.md` for details on why this matters.
 ## Summary
 
 **Key Points**:
+
 1. Always check labels exist before creating issues
 2. Use descriptive titles and comprehensive descriptions
 3. Link issues to PRs and commits
@@ -578,6 +595,7 @@ See `terminal-standards.md` for details on why this matters.
 6. Close issues via commit messages when appropriate
 
 **Command Reference**:
+
 ```bash
 # Labels
 gh label list

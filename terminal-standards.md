@@ -25,6 +25,7 @@ AI agents operating in terminal environments face challenges when dealing with c
 ## Why This Matters for AI Agents
 
 **User Shell Customizations**:
+
 ```bash
 # User's ~/.zshrc might contain:
 alias cat='bat'
@@ -34,11 +35,13 @@ PROMPT='%F{cyan}➜ %f%F{yellow}${PWD/#$HOME/~}%f $(git_prompt_info)'
 ```
 
 **Impact on AI Agents**:
+
 - Agent runs `cat file.txt` → Gets `bat` output with colors/line numbers → Cannot parse reliably
 - Agent reads prompt → Wastes tokens on colorized unicode characters
 - Agent waits for oh-my-zsh to load → 2-3 second delay per command
 
 **With Clean Environment**:
+
 - `cat file.txt` → Standard output, predictable format
 - Minimal prompt → No token waste
 - Instant startup → Commands execute immediately
@@ -65,6 +68,7 @@ PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --
 ```
 
 **Component Breakdown**:
+
 - `PATH=...` - Sets minimal, predictable PATH (overrides user's custom PATH)
 - `/bin/bash` - Uses system bash (NOT user's default shell like zsh)
 - `--noprofile` - Skips reading `~/.bash_profile`
@@ -72,6 +76,7 @@ PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin /bin/bash --
 - `-c 'command'` - Runs command in clean environment
 
 **Why Bash Instead of Zsh**:
+
 - More predictable default behavior across all systems
 - Faster initialization (no framework loading overhead)
 - Standard on all Unix-like systems
@@ -94,6 +99,7 @@ cmd.exe /c npm test
 ```
 
 **Why cmd.exe Instead of PowerShell**:
+
 - Faster initialization (no module loading)
 - More predictable output formatting
 - No profile scripts or auto-loading features
@@ -142,12 +148,14 @@ command --help 2>&1 | head -20
 ```
 
 **Why This Matters**:
+
 - Pagers (`less`, `more`) wait for user input to scroll
 - AI agents cannot provide interactive input
 - Terminal session hangs indefinitely
 - Session must be killed and restarted
 
 **Always Use**:
+
 - `git --no-pager <subcommand>`
 - `head -n <lines>` to limit output
 - `/bin/cat` for file reading
@@ -158,16 +166,19 @@ command --help 2>&1 | head -20
 ### Recommended Minimal PATH
 
 **macOS (Apple Silicon)**:
+
 ```bash
 PATH=/opt/homebrew/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 ```
 
 **macOS (Intel) / Linux**:
+
 ```bash
 PATH=/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin
 ```
 
 **Windows**:
+
 ```cmd
 PATH=%SystemRoot%\System32;%SystemRoot%;C:\Program Files\Git\cmd;C:\Program Files\nodejs
 ```
@@ -190,12 +201,14 @@ PATH=%SystemRoot%\System32;%SystemRoot%;C:\Program Files\Git\cmd;C:\Program File
 ### Accessing Development Tools
 
 **npm/yarn** scripts already include `node_modules/.bin`:
+
 ```bash
 npm test          # Automatically finds node_modules/.bin/jest
 npm run build     # Automatically finds node_modules/.bin/webpack
 ```
 
 **Explicit tool paths** when needed:
+
 ```bash
 ./node_modules/.bin/typescript-formatter
 ~/.nvm/versions/node/v20.0.0/bin/node
@@ -242,16 +255,19 @@ PATH=... /bin/bash --noprofile --norc -c '/bin/cat package.json'
 **Validation Steps**:
 
 1. **Launch clean bash**:
+
    ```bash
    /bin/bash --noprofile --norc
    ```
 
 2. **Verify no aliases**:
+
    ```bash
    alias  # Should return empty or minimal output
    ```
 
 3. **Test standard commands**:
+
    ```bash
    /bin/cat /etc/hosts    # Should work predictably
    /bin/ls -la            # Should have standard format
@@ -259,6 +275,7 @@ PATH=... /bin/bash --noprofile --norc -c '/bin/cat package.json'
    ```
 
 4. **Verify fast startup**:
+
    ```bash
    time /bin/bash --noprofile --norc -c 'echo test'
    # Should complete in < 0.1 seconds
