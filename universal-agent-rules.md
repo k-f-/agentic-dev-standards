@@ -15,6 +15,7 @@
 
 **Workflow-specific guidance**:
 
+- **`workflow-patterns/context-preservation.md`** - Context management and token optimization
 - **`workflow-patterns/session-management.md`** - Session summaries and tracking
 - **`workflow-patterns/branch-strategy.md`** - Branch naming and git workflows
 - **`workflow-patterns/github-issues.md`** - Issue and PR management
