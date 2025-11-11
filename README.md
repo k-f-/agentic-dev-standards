@@ -16,6 +16,7 @@ This repository provides a comprehensive set of standards and best practices for
 
 ### Workflow Patterns
 
+- **[context-preservation.md](workflow-patterns/context-preservation.md)** - Context management and token optimization
 - **[session-management.md](workflow-patterns/session-management.md)** - Session summaries and tracking
 - **[branch-strategy.md](workflow-patterns/branch-strategy.md)** - Branch naming and git workflows
 - **[github-issues.md](workflow-patterns/github-issues.md)** - Issue and PR management
