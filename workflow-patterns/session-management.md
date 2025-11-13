@@ -4,6 +4,112 @@
 
 When working with AI coding assistants over extended periods, maintaining session context and tracking progress is critical. This guide provides standards for documenting work sessions.
 
+## 🚀 Session Start Checklist
+
+**IMPORTANT**: At the beginning of each new AI coding session, follow this checklist to ensure proper context and capabilities.
+
+### Core Standards Loading
+
+**CRITICAL - Read these files first**:
+
+1. **`agentic-dev-standards/universal-agent-rules.md`**
+   - Universal AI agent guidelines and meta-rules
+   - **Includes**: Model Context Protocol (MCP) guidance - prefer MCPs when available
+   - Submodule management rules
+   - Terminal usage rules overview
+
+2. **`agentic-dev-standards/terminal-standards.md`**
+   - MANDATORY terminal command patterns
+   - Clean shell environment requirements
+   - Avoids issues with user's custom shell configurations
+
+3. **`agentic-dev-standards/commit-conventions.md`**
+   - Conventional Commits standard
+   - Atomic commit requirements
+   - Changelog generation format
+
+### Session Context Restoration
+
+4. **Read latest session summary** (if exists):
+   - Location: `docs/archive/session-summaries/[latest-date]_[topic].md`
+   - Provides: Previous decisions, pending items, blockers, next steps
+
+5. **Check current branch state**:
+   ```bash
+   git status                    # Current state
+   git log --oneline -10         # Recent commits
+   git branch -vv                # All branches
+   ```
+
+### Submodule and Dependencies
+
+6. **Update agentic-dev-standards submodule**:
+   ```bash
+   git submodule update --remote agentic-dev-standards
+   ```
+   - Ensures you have the latest universal standards
+   - Check if new standards have been added
+
+7. **Verify dependencies** (if applicable):
+   - Check for outdated packages
+   - Review any security advisories
+   - Confirm build tools are working
+
+### Tool Capabilities Check
+
+8. **Check for Model Context Protocol (MCP) servers**:
+   - Verify which MCP servers are available
+   - Prefer using MCP tools over built-in tools when reasonable
+   - See `agentic-dev-standards/universal-agent-rules.md` for MCP guidance
+   - See `agentic-dev-standards/integration/claude-code.md` for Claude Code MCP setup
+
+### Project-Specific Context
+
+9. **Read project-specific instructions**:
+   - GitHub Copilot: `.github/copilot-instructions.md`
+   - Cursor: `.cursorrules`
+   - Windsurf: `.windsurfrules`
+   - Continue: `.continue/config.json`
+   - Claude Code: `docs/development/claude-code-context.md` (if exists)
+
+10. **Review project documentation**:
+    - `README.md` - Project overview and setup
+    - `docs/development/` - Development guidelines
+    - `CHANGELOG.md` - Recent changes
+    - `docs/planning/` - Outstanding work and TODOs
+
+### Quick Session Start Template
+
+For quick session starts, copy and paste this to your AI assistant:
+
+```
+I'm starting a new session. Please read these files for context:
+
+Core Standards:
+1. agentic-dev-standards/universal-agent-rules.md
+2. agentic-dev-standards/terminal-standards.md
+3. agentic-dev-standards/commit-conventions.md
+
+Session Context:
+4. docs/archive/session-summaries/[latest-date]_[topic].md
+
+After reading, please:
+- Update the agentic-dev-standards submodule
+- Run git status to see current state
+- Check for available MCP servers
+- Confirm you understand the current context
+```
+
+### What This Achieves
+
+✅ **Consistent behavior** - AI follows universal standards
+✅ **Context awareness** - AI knows what happened in previous sessions
+✅ **Best practices** - AI uses proper terminal commands, commit formats, etc.
+✅ **MCP usage** - AI prefers specialized MCP tools when available
+✅ **Up-to-date rules** - AI has latest standards from submodule
+
+---
+
 ## 📋 Session Summary Requirements
 
 **IMPORTANT**: At the end of each work session, create a comprehensive summary to preserve context and decisions.
