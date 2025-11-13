@@ -51,6 +51,64 @@ Rules discovered during work are often the most valuable because they come from 
 
 ---
 
+## 🔌 Model Context Protocol (CRITICAL)
+
+**Universal Principle**: When your AI tool supports Model Context Protocol (MCP) servers, **prefer using MCP tools over built-in tools whenever reasonable**.
+
+### What is MCP?
+
+Model Context Protocol (MCP) is a standardized way for AI assistants to interact with external tools, data sources, and services. MCP servers extend AI capabilities beyond built-in functionality through specialized, community-maintained integrations.
+
+### Why Prefer MCP?
+
+**Advantages of MCP over built-in tools**:
+
+- ✅ **More specialized functionality** - Purpose-built for specific tasks
+- ✅ **Better performance** - Optimized for their use case
+- ✅ **Broader capabilities** - Access to databases, APIs, filesystems, and external services
+- ✅ **Community-maintained** - Constantly improving and expanding
+- ✅ **Standardized protocol** - Consistent interface across different AI tools
+
+### When to Use MCP
+
+**Prefer MCP servers when**:
+
+- An MCP server exists for your specific use case
+- You need specialized functionality (database access, web scraping, API integration, etc.)
+- You want better performance for repeated operations
+- You need to integrate with external systems or services
+- The task would benefit from domain-specific tooling
+
+**Use built-in tools when**:
+
+- No relevant MCP server exists for your use case
+- The task is simple and built-in tools are sufficient
+- You want to minimize external dependencies
+- You're working in an environment where MCP setup isn't possible
+
+### Which Tools Support MCP?
+
+**Currently supported**:
+
+- ✅ **Claude Code (CLI)** - Full MCP support (see `integration/claude-code.md` for details)
+- 🔄 **Other tools** - Check your tool's documentation for MCP support status
+
+### Best Practices
+
+1. **Check for available MCPs first** - Before implementing a custom solution, search for existing MCP servers
+2. **Document MCP usage** - Note which MCP servers your project uses in project documentation
+3. **Keep MCPs updated** - Treat MCP servers like regular dependencies
+4. **Test MCP integrations** - Verify MCP server functionality before relying on it
+5. **Provide fallback guidance** - If an MCP server is unavailable, know how to accomplish the task with built-in tools
+
+### Resources
+
+- **MCP Documentation**: See `integration/claude-code.md` for Claude Code-specific MCP setup and usage
+- **Available MCP Servers**: Check the [Anthropic MCP documentation](https://modelcontextprotocol.io/) for available servers
+- **Custom MCP Servers**: Projects can implement their own MCP servers for specialized needs
+
+---
+
 ## 🔄 Submodule Management (CRITICAL)
 
 **EVERY SESSION START:**
