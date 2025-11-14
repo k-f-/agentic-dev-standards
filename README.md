@@ -35,6 +35,78 @@ This repository provides a comprehensive set of standards and best practices for
 
 - **[Migration Guide](migration/README.md)** - Migrate from tool-specific to universal standards
 
+## 🔌 MCP Server (NEW - Token Efficient!)
+
+**For Claude Code users**: Access standards on-demand via Model Context Protocol (MCP) instead of loading everything upfront.
+
+### What is MCP?
+
+Model Context Protocol (MCP) is a standardized way for AI assistants to fetch context on-demand rather than front-loading everything. Think of it as "function calling for external data" - Claude only loads standards when actually needed.
+
+### Why Use MCP?
+
+**Token Savings**: 74-86% reduction per session
+
+**Before MCP** (traditional approach):
+```
+Session starts:
+- Load universal-agent-rules.md (17KB) = 4,500 tokens
+- Load terminal-standards.md (9KB) = 2,500 tokens
+- Load commit-conventions.md (4KB) = 1,000 tokens
+- Load all workflow patterns (60KB) = 15,000 tokens
+Total: 23,000 tokens BEFORE any actual work!
+```
+
+**After MCP** (on-demand approach):
+```
+Session starts: 0 tokens from standards
+User: "Help me commit"
+Claude: Fetches commit-conventions.md = 1,000 tokens (only when needed)
+User: "Now help with testing"
+Claude: Uses existing context, no new standards needed
+Total: 1,000 tokens (96% reduction!)
+```
+
+**Additional Benefits**:
+- ✅ Instant updates (no submodule management)
+- ✅ Scales to any number of projects (one-time setup)
+- ✅ Standards loaded only when actually needed
+- ✅ Cleaner project structure (no submodule)
+
+### Quick MCP Setup (Claude Code Only)
+
+**1. Install dependencies**:
+```bash
+cd /path/to/agentic-dev-standards
+npm install
+```
+
+**2. Configure Claude Code** (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+```json
+{
+  "mcpServers": {
+    "agentic-dev-standards": {
+      "command": "node",
+      "args": ["/path/to/agentic-dev-standards/mcp-server.js"]
+    }
+  }
+}
+```
+
+**3. Restart Claude Code** - Standards now available via 4 MCP tools:
+- `get_core_standard` - universal-agent-rules, terminal-standards, commit-conventions
+- `get_workflow_pattern` - session-management, branch-strategy, github-issues, etc.
+- `get_integration_guide` - tool-specific setup guides
+- `search_standards` - search across all standards
+
+[Full MCP setup guide →](integration/claude-code.md#mcp-setup)
+
+### Other AI Tools?
+
+MCP is currently only supported by Claude Code (CLI). For other tools:
+- **Quick reference**: Use [`copilot-essentials.md`](copilot-essentials.md) (~150 lines, distilled core standards)
+- **Full standards**: Use git submodule (traditional approach, see below)
+
 ## 🚀 Quick Start
 
 ### 1. Choose Your AI Tool
@@ -49,7 +121,16 @@ This repository provides a comprehensive set of standards and best practices for
 
 See [full comparison →](integration/README.md)
 
-### 2. Add as Submodule
+### 2. Choose Integration Method
+
+**Option A: MCP Server** (Claude Code only - RECOMMENDED for token efficiency)
+- See [MCP Server section above](#-mcp-server-new---token-efficient) for setup
+- 74-86% token reduction per session
+- One-time setup, works across all projects
+
+**Option B: Git Submodule** (All AI tools)
+- Traditional approach, works with all tools
+- Add once per project:
 
 ```bash
 # In your project root
@@ -57,7 +138,12 @@ git submodule add https://github.com/k-f-/agentic-dev-standards.git
 git submodule update --init --recursive
 ```
 
-### 3. Configure Your Tool
+**Option C: Copilot Essentials** (GitHub Copilot only)
+- Lightweight option: Copy [`copilot-essentials.md`](copilot-essentials.md) to your project
+- ~150 lines covering core standards
+- Good for quick reference, but missing full workflow patterns
+
+### 3. Configure Your Tool (for Submodule/Copilot Essentials)
 
 Create your tool's configuration file and reference these standards:
 
@@ -190,13 +276,29 @@ project-c/.cursorrules (450 lines)
 # Same content duplicated! Hard to keep in sync.
 ```
 
-**After** (one source of truth):
+**After** (one source of truth - multiple options):
 
+**Option 1: MCP Server** (Claude Code):
+```
+project-a/ (no submodule needed!)
+project-b/ (no submodule needed!)
+~/Library/Application Support/Claude/claude_desktop_config.json (one-time MCP config)
+# Standards loaded on-demand, 74-86% token reduction!
+```
+
+**Option 2: Git Submodule** (All tools):
 ```
 project-a/.github/copilot-instructions.md (50 lines) → references submodule
 project-b/.github/copilot-instructions.md (50 lines) → references submodule
 project-c/.cursorrules (50 lines) → references submodule
 agentic-dev-standards/ (submodule, single source of truth)
+```
+
+**Option 3: Copilot Essentials** (GitHub Copilot):
+```
+project-a/.github/copilot-instructions.md (references copilot-essentials.md)
+project-a/copilot-essentials.md (150 lines, distilled standards)
+# Lightweight, but missing full workflow patterns
 ```
 
 ### Multi-Tool Support

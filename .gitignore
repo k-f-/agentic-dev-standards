@@ -11,3 +11,15 @@ Thumbs.db
 *.bak
 *.swp
 *~
+
+# Node.js
+node_modules/
+package-lock.json
+
+# Claude Code local settings (session-specific permissions)
+.claude/settings.local.json
+
+# Temporary test/setup files
+MCP-SETUP-COMPLETE.md
+TESTING.md
+test-mcp-files.js
