@@ -1,0 +1,42 @@
+{
+  "name": "agentic-dev-standards-mcp",
+  "version": "1.0.0",
+  "description": "MCP server providing on-demand access to universal agentic development standards, conventions, and workflow patterns",
+  "type": "module",
+  "main": "mcp-server.js",
+  "bin": {
+    "agentic-dev-standards-mcp": "./mcp-server.js"
+  },
+  "scripts": {
+    "start": "node mcp-server.js"
+  },
+  "keywords": [
+    "mcp",
+    "model-context-protocol",
+    "ai-development",
+    "coding-standards",
+    "development-standards",
+    "agentic-coding",
+    "claude-code",
+    "github-copilot",
+    "cursor",
+    "windsurf",
+    "continue"
+  ],
+  "author": "k-f-",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/k-f-/agentic-dev-standards.git"
+  },
+  "bugs": {
+    "url": "https://github.com/k-f-/agentic-dev-standards/issues"
+  },
+  "homepage": "https://github.com/k-f-/agentic-dev-standards#readme",
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.0.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+}

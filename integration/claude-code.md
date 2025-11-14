@@ -14,12 +14,160 @@ npm install -g @anthropic-ai/claude-code
 brew install claude-code
 ```
 
-### 2. Add Submodule
+### 2A. MCP Server Setup (RECOMMENDED - Token Efficient!)
+
+**Model Context Protocol (MCP)** allows Claude to fetch standards on-demand rather than loading everything upfront, resulting in **74-86% token reduction** per session.
+
+#### Benefits of MCP
+
+- ✅ **Massive token savings**: Only load standards when actually needed
+- ✅ **One-time setup**: Configure once, works across all projects
+- ✅ **Instant updates**: No submodule management required
+- ✅ **Cleaner projects**: No submodule directory needed
+- ✅ **Automatic loading**: Claude fetches standards as needed
+
+#### Step-by-Step MCP Setup
+
+**1. Clone and install the standards repository**:
+
+```bash
+# Clone to a permanent location (not per-project)
+cd ~/Development  # or your preferred location
+git clone https://github.com/k-f-/agentic-dev-standards.git
+cd agentic-dev-standards
+
+# Install dependencies
+npm install
+```
+
+**2. Configure Claude Code**:
+
+Edit your Claude desktop config file:
+- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
+- **Linux**: `~/.config/Claude/claude_desktop_config.json`
+- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
+
+Add the MCP server configuration:
+
+```json
+{
+  "mcpServers": {
+    "agentic-dev-standards": {
+      "command": "node",
+      "args": ["/full/path/to/agentic-dev-standards/mcp-server.js"]
+    }
+  }
+}
+```
+
+**Important**: Replace `/full/path/to` with your actual path (e.g., `/Users/yourname/Development/agentic-dev-standards/mcp-server.js`)
+
+**3. Restart Claude Code**:
+
+```bash
+# Exit any running Claude sessions
+exit
+
+# Verify MCP server is loaded (optional)
+# Check ~/.claude/logs/ for MCP connection messages
+```
+
+#### Available MCP Tools
+
+Once configured, Claude has access to these tools (automatically invoked as needed):
+
+1. **`get_core_standard`** - Retrieve core standards
+   - `universal-agent-rules` - Meta-rules, MCP guidance, testing, code quality
+   - `terminal-standards` - CRITICAL: Clean shell environment requirements
+   - `commit-conventions` - Conventional Commits format
+
+2. **`get_workflow_pattern`** - Retrieve workflow patterns
+   - `context-preservation` - Token management, ADRs
+   - `session-management` - Session start checklist, summaries
+   - `branch-strategy` - Git workflows, PR guidelines
+   - `github-issues` - Issue/PR management
+   - `dependency-management` - Dependency evaluation
+
+3. **`get_integration_guide`** - Retrieve tool-specific guides
+   - `overview` - Comparison matrix
+   - `vscode-copilot` - GitHub Copilot setup
+   - `cursor` - Cursor IDE setup
+   - `claude-code` - This guide!
+   - `windsurf` - Windsurf IDE setup
+   - `continue` - Continue extension setup
+
+4. **`search_standards`** - Search across all standards
+   - Find relevant sections by keyword
+   - Returns matching lines with context
+
+#### Testing MCP Setup
+
+Start Claude Code in any project:
+
+```bash
+cd your-project
+claude
+```
+
+Try asking:
+
+```
+You: "What are the terminal standards?"
+
+Claude: [Automatically fetches terminal-standards.md via MCP and explains]
+```
+
+Or:
+
+```
+You: "Show me the commit conventions"
+
+Claude: [Fetches commit-conventions.md and displays]
+```
+
+You don't need to explicitly tell Claude to use MCP - it will automatically fetch standards as needed!
+
+#### Updating Standards
+
+To get latest standards:
+
+```bash
+cd ~/Development/agentic-dev-standards  # or wherever you cloned it
+git pull origin main
+```
+
+Changes are immediately available to Claude - no configuration updates needed!
+
+#### Token Savings Example
+
+**Without MCP** (traditional submodule approach):
+```
+Session start:
+You: "Read agentic-dev-standards/universal-agent-rules.md"
+You: "Read agentic-dev-standards/terminal-standards.md"
+You: "Read agentic-dev-standards/commit-conventions.md"
+You: "Read all workflow patterns..."
+Result: ~23,000 tokens loaded upfront
+```
+
+**With MCP**:
+```
+Session start: 0 tokens from standards
+You: "Help me commit this change"
+Claude: [Fetches commit-conventions.md = 1,000 tokens, only when needed]
+Result: ~1,000 tokens (96% reduction!)
+```
+
+### 2B. Traditional Submodule Setup (Alternative)
+
+If you prefer the traditional approach or need standards in your git repository:
 
 ```bash
 git submodule add https://github.com/k-f-/agentic-dev-standards.git
 git submodule update --init --recursive
 ```
+
+**Note**: With MCP setup, you don't need submodules anymore! Each project can be cleaner without the submodule directory.
 
 ### 3. Configure Project Context
 

@@ -1,0 +1,24 @@
+# Development files
+.git
+.gitignore
+.DS_Store
+Thumbs.db
+*.tmp
+*.bak
+*.swp
+
+# Editor directories
+.vscode/
+.idea/
+.claude/
+
+# Local settings
+.claude/settings.local.json
+
+# Documentation that's not needed at runtime
+migration/
+
+# Keep these for the MCP server:
+# - All .md files (standards content)
+# - mcp-server.js (the server itself)
+# - package.json (metadata)
