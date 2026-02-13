@@ -151,8 +151,8 @@ At session start, always:
 
 For **complete standards** with workflow patterns, integration guides, and detailed best practices:
 
-### Option 1: MCP Server (Recommended for Claude Code)
-See [integration/claude-code.md](integration/claude-code.md) for MCP setup instructions.
+### Option 1: MCP Server (Recommended for OpenCode / Claude Code)
+See [integration/opencode.md](integration/opencode.md) or [integration/claude-code.md](integration/claude-code.md) for MCP setup instructions.
 
 **Benefits**: 74-86% token reduction, on-demand loading, instant updates
 
@@ -177,7 +177,9 @@ For detailed guidance on specific workflows, see:
 - `workflow-patterns/branch-strategy.md` - Git workflows, PR guidelines
 - `workflow-patterns/github-issues.md` - Issue/PR management
 - `workflow-patterns/dependency-management.md` - Dependency evaluation
+- `workflow-patterns/multi-agent-orchestration.md` - Sub-agent patterns, model routing, task decomposition
+- `workflow-patterns/agent-safety.md` - Permissions, destructive operations, secrets management
 
 ---
 
-**Version**: 1.0.0 | **License**: MIT | **Maintained by**: k-f-
+**Version**: 2.0.0 | **License**: MIT | **Maintained by**: k-f-

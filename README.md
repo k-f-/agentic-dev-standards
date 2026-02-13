@@ -1,6 +1,6 @@
 # Agentic Development Standards
 
-**Universal best practices for AI-assisted development**, compatible with GitHub Copilot, Cursor, Claude Code, Windsurf, Continue, and other AI coding assistants.
+**Universal best practices for AI-assisted development**, compatible with OpenCode, Claude Code, Cursor, GitHub Copilot, Windsurf, Continue, Aider, and other AI coding assistants.
 
 ## 🎯 Purpose
 
@@ -21,13 +21,16 @@ This repository provides a comprehensive set of standards and best practices for
 - **[branch-strategy.md](workflow-patterns/branch-strategy.md)** - Branch naming and git workflows
 - **[github-issues.md](workflow-patterns/github-issues.md)** - Issue and PR management
 - **[dependency-management.md](workflow-patterns/dependency-management.md)** - Adding and maintaining dependencies
+- **[multi-agent-orchestration.md](workflow-patterns/multi-agent-orchestration.md)** - Sub-agent patterns, model routing, task decomposition
+- **[agent-safety.md](workflow-patterns/agent-safety.md)** - Permissions, destructive operations, secrets management
 
 ### Tool Integration
 
 - **[Integration Guide](integration/README.md)** - Tool capabilities matrix and setup overview
-- **[GitHub Copilot](integration/vscode-copilot.md)** - VSCode + Copilot integration
-- **[Cursor](integration/cursor.md)** - Cursor IDE integration
+- **[OpenCode](integration/opencode.md)** - OpenCode terminal agent integration (open-source, provider-agnostic)
 - **[Claude Code](integration/claude-code.md)** - Claude CLI integration
+- **[Cursor](integration/cursor.md)** - Cursor IDE integration
+- **[GitHub Copilot](integration/vscode-copilot.md)** - VSCode + Copilot integration
 - **[Windsurf](integration/windsurf.md)** - Windsurf IDE integration
 - **[Continue](integration/continue.md)** - Continue extension integration
 
@@ -35,9 +38,9 @@ This repository provides a comprehensive set of standards and best practices for
 
 - **[Migration Guide](migration/README.md)** - Migrate from tool-specific to universal standards
 
-## 🔌 MCP Server (NEW - Token Efficient!)
+## 🔌 MCP Server (Token Efficient!)
 
-**For Claude Code users**: Access standards on-demand via Model Context Protocol (MCP) instead of loading everything upfront.
+**For OpenCode and Claude Code users**: Access standards on-demand via Model Context Protocol (MCP) instead of loading everything upfront.
 
 ### What is MCP?
 
@@ -73,7 +76,7 @@ Total: 1,000 tokens (96% reduction!)
 - ✅ Standards loaded only when actually needed
 - ✅ Cleaner project structure (no submodule)
 
-### Quick MCP Setup (Claude Code Only)
+### Quick MCP Setup
 
 **1. Install dependencies**:
 ```bash
@@ -81,7 +84,22 @@ cd /path/to/agentic-dev-standards
 npm install
 ```
 
-**2. Configure Claude Code** (`~/Library/Application Support/Claude/claude_desktop_config.json`):
+**2. Configure your tool**:
+
+**OpenCode** (`.opencode/config.json`):
+```json
+{
+  "mcpServers": {
+    "agentic-dev-standards": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["/path/to/agentic-dev-standards/mcp-server.js"]
+    }
+  }
+}
+```
+
+**Claude Code** (`~/Library/Application Support/Claude/claude_desktop_config.json`):
 ```json
 {
   "mcpServers": {
@@ -93,17 +111,18 @@ npm install
 }
 ```
 
-**3. Restart Claude Code** - Standards now available via 4 MCP tools:
+**3. Restart your tool** - Standards now available via 5 MCP tools:
 - `get_core_standard` - universal-agent-rules, terminal-standards, commit-conventions
-- `get_workflow_pattern` - session-management, branch-strategy, github-issues, etc.
+- `get_workflow_pattern` - session-management, branch-strategy, multi-agent-orchestration, agent-safety, etc.
 - `get_integration_guide` - tool-specific setup guides
 - `search_standards` - search across all standards
+- `list_available_standards` - discover all available standards
 
-[Full MCP setup guide →](integration/claude-code.md#mcp-setup)
+Full setup guides: [OpenCode →](integration/opencode.md) | [Claude Code →](integration/claude-code.md)
 
 ### Other AI Tools?
 
-MCP is currently only supported by Claude Code (CLI). For other tools:
+MCP is fully supported by OpenCode and Claude Code. For other tools:
 - **Quick reference**: Use [`copilot-essentials.md`](copilot-essentials.md) (~150 lines, distilled core standards)
 - **Full standards**: Use git submodule (traditional approach, see below)
 
@@ -113,9 +132,10 @@ MCP is currently only supported by Claude Code (CLI). For other tools:
 
 | Tool | Best For | Setup Guide |
 |------|----------|-------------|
+| **OpenCode** | Open-source, provider-agnostic, terminal-first | [Setup →](integration/opencode.md) |
+| **Claude Code** | Anthropic ecosystem, autonomous agents, CI/CD | [Setup →](integration/claude-code.md) |
+| **Cursor** | AI-first IDE, agent mode, multi-file editing | [Setup →](integration/cursor.md) |
 | **GitHub Copilot** | VSCode users, GitHub integration | [Setup →](integration/vscode-copilot.md) |
-| **Cursor** | AI-first IDE, multi-file editing | [Setup →](integration/cursor.md) |
-| **Claude Code** | Terminal workflows, autonomous agents | [Setup →](integration/claude-code.md) |
 | **Windsurf** | VSCode-like with Cascade mode | [Setup →](integration/windsurf.md) |
 | **Continue** | Open-source, customizable | [Setup →](integration/continue.md) |
 
@@ -123,7 +143,7 @@ See [full comparison →](integration/README.md)
 
 ### 2. Choose Integration Method
 
-**Option A: MCP Server** (Claude Code only - RECOMMENDED for token efficiency)
+**Option A: MCP Server** (OpenCode, Claude Code - RECOMMENDED for token efficiency)
 - See [MCP Server section above](#-mcp-server-new---token-efficient) for setup
 - 74-86% token reduction per session
 - One-time setup, works across all projects
@@ -245,6 +265,8 @@ test: Add integration tests
 - **Branch Strategy**: Consistent branch naming (feature/, bugfix/, etc.) and git workflows
 - **GitHub Issues**: Label management, issue templates, PR best practices
 - **Dependency Management**: Evaluation checklist before adding dependencies
+- **Multi-Agent Orchestration**: Sub-agent patterns, model specialization and routing, task decomposition, cost management
+- **Agent Safety**: Permission models, destructive operation detection, secrets management, sandboxing, audit trails
 
 [Full details →](workflow-patterns/)
 
@@ -307,11 +329,13 @@ Support multiple AI tools without duplication:
 
 ```bash
 my-project/
-├── .github/copilot-instructions.md    # GitHub Copilot config
-├── .cursorrules                        # Cursor config
+├── AGENTS.md                           # OpenCode context
+├── CLAUDE.md                           # Claude Code context
+├── .cursor/rules/                      # Cursor rules
+├── .github/copilot-instructions.md     # GitHub Copilot config
 ├── .windsurfrules                      # Windsurf config
 ├── .continue/config.json               # Continue config
-└── agentic-dev-standards/             # ONE source of truth for all
+└── agentic-dev-standards/              # ONE source of truth for all
 ```
 
 All configs reference the same universal standards.
@@ -327,11 +351,14 @@ All configs reference the same universal standards.
 
 ```
 my-project/
+├── AGENTS.md                            # OpenCode project context
+├── CLAUDE.md                            # Claude Code project context
 ├── .github/
-│   └── copilot-instructions.md         # Tool config (references submodule)
+│   └── copilot-instructions.md          # GitHub Copilot config
+├── .cursor/rules/                       # Cursor rules
 ├── .vscode/
 │   └── settings.json                    # Terminal profiles
-├── agentic-dev-standards/              # This submodule
+├── agentic-dev-standards/               # This submodule
 │   ├── README.md                        # This file
 │   ├── universal-agent-rules.md         # Core standards
 │   ├── terminal-standards.md            # Terminal requirements
@@ -340,12 +367,15 @@ my-project/
 │   │   ├── session-management.md
 │   │   ├── branch-strategy.md
 │   │   ├── github-issues.md
-│   │   └── dependency-management.md
+│   │   ├── dependency-management.md
+│   │   ├── multi-agent-orchestration.md
+│   │   └── agent-safety.md
 │   ├── integration/                     # Tool-specific guides
 │   │   ├── README.md
-│   │   ├── vscode-copilot.md
-│   │   ├── cursor.md
+│   │   ├── opencode.md
 │   │   ├── claude-code.md
+│   │   ├── cursor.md
+│   │   ├── vscode-copilot.md
 │   │   ├── windsurf.md
 │   │   └── continue.md
 │   └── migration/
@@ -423,9 +453,11 @@ See [LICENSE](LICENSE) file for details.
 
 **A**: Depends on your workflow:
 
-- **IDE-first, want completion + chat**: GitHub Copilot or Cursor
-- **Terminal-first, complex tasks**: Claude Code
-- **Open-source, customizable**: Continue
+- **Terminal-first, open-source, multi-provider**: OpenCode
+- **Terminal-first, Anthropic ecosystem**: Claude Code
+- **IDE-first, agent mode + completion**: Cursor
+- **IDE-first, GitHub ecosystem**: GitHub Copilot
+- **Open-source, IDE extension**: Continue
 - See [full comparison →](integration/README.md)
 
 ### Q: Can I use this with multiple tools?
@@ -466,8 +498,8 @@ git commit -m "chore: Pin agentic-dev-standards to v2.1.0"
 
 ---
 
-**Version**: 2.0.0 (Universal Tool Support)
-**Last Updated**: October 31, 2025
+**Version**: 2.0.0 (Multi-Agent, Safety, OpenCode Support)
+**Last Updated**: February 12, 2026
 **Maintained by**: k-f- and contributors
 **Repository**: https://github.com/k-f-/agentic-dev-standards
 

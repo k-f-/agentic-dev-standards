@@ -8,9 +8,10 @@
  *
  * Tools:
  * - get_core_standard: Retrieve core standards (universal-agent-rules, terminal-standards, commit-conventions)
- * - get_workflow_pattern: Retrieve workflow patterns (context-preservation, session-management, etc.)
- * - get_integration_guide: Retrieve tool-specific integration guides
+ * - get_workflow_pattern: Retrieve workflow patterns (context-preservation, session-management, multi-agent-orchestration, agent-safety, etc.)
+ * - get_integration_guide: Retrieve tool-specific integration guides (opencode, claude-code, cursor, etc.)
  * - search_standards: Search across all standards for keywords
+ * - list_available_standards: Discover all available standards, patterns, and guides
  */
 
 import { Server } from '@modelcontextprotocol/sdk/server/index.js';
@@ -40,11 +41,14 @@ const WORKFLOW_PATTERNS = {
   'branch-strategy': 'workflow-patterns/branch-strategy.md',
   'github-issues': 'workflow-patterns/github-issues.md',
   'dependency-management': 'workflow-patterns/dependency-management.md',
+  'multi-agent-orchestration': 'workflow-patterns/multi-agent-orchestration.md',
+  'agent-safety': 'workflow-patterns/agent-safety.md',
 };
 
 // File mappings for integration guides
 const INTEGRATION_GUIDES = {
   'overview': 'integration/README.md',
+  'opencode': 'integration/opencode.md',
   'vscode-copilot': 'integration/vscode-copilot.md',
   'cursor': 'integration/cursor.md',
   'claude-code': 'integration/claude-code.md',
@@ -143,7 +147,7 @@ function formatSearchResults(results, keyword) {
 const server = new Server(
   {
     name: 'agentic-dev-standards',
-    version: '1.0.0',
+    version: '2.0.0',
   },
   {
     capabilities: {
@@ -173,7 +177,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'get_workflow_pattern',
-        description: 'Retrieve a workflow pattern document. Available patterns: context-preservation (token management, ADRs), session-management (session start checklist, summaries), branch-strategy (git workflows, PR guidelines), github-issues (issue/PR management), dependency-management (dependency evaluation)',
+        description: 'Retrieve a workflow pattern document. Available patterns: context-preservation (token management, ADRs), session-management (session start checklist, summaries), branch-strategy (git workflows, PR guidelines), github-issues (issue/PR management), dependency-management (dependency evaluation), multi-agent-orchestration (sub-agents, model routing, decomposition), agent-safety (permissions, destructive ops, secrets, sandboxing)',
         inputSchema: {
           type: 'object',
           properties: {
@@ -188,7 +192,7 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
       },
       {
         name: 'get_integration_guide',
-        description: 'Retrieve a tool-specific integration guide. Available guides: overview (comparison matrix), vscode-copilot (GitHub Copilot setup), cursor (Cursor IDE setup), claude-code (Claude CLI + MCP setup), windsurf (Windsurf IDE setup), continue (Continue extension setup)',
+        description: 'Retrieve a tool-specific integration guide. Available guides: overview (comparison matrix), opencode (OpenCode terminal agent + MCP setup), vscode-copilot (GitHub Copilot setup), cursor (Cursor IDE setup), claude-code (Claude CLI + MCP setup), windsurf (Windsurf IDE setup), continue (Continue extension setup)',
         inputSchema: {
           type: 'object',
           properties: {
@@ -223,6 +227,15 @@ server.setRequestHandler(ListToolsRequestSchema, async () => {
             },
           },
           required: ['keyword'],
+        },
+      },
+      {
+        name: 'list_available_standards',
+        description: 'List all available standards, workflow patterns, and integration guides with descriptions. Use this to discover what standards are available before fetching specific ones.',
+        inputSchema: {
+          type: 'object',
+          properties: {},
+          required: [],
         },
       },
     ],
@@ -339,6 +352,62 @@ server.setRequestHandler(CallToolRequestSchema, async (request) => {
             {
               type: 'text',
               text: formattedResults,
+            },
+          ],
+        };
+      }
+
+      case 'list_available_standards': {
+        const STANDARD_DESCRIPTIONS = {
+          core: {
+            'universal-agent-rules': 'Universal best practices for all AI coding agents — meta-rules, MCP guidance, testing, code quality, documentation organization',
+            'terminal-standards': 'CRITICAL: Clean shell environment requirements for predictable AI agent behavior — PATH setup, pager avoidance, command combining',
+            'commit-conventions': 'Conventional Commits format — types, scopes, atomic commits, examples',
+          },
+          workflows: {
+            'context-preservation': 'Token budget management, progressive summarization, Architecture Decision Records (ADRs), session handoff patterns',
+            'session-management': 'Session start/end checklists, summary templates, context loading, session tracking',
+            'branch-strategy': 'Git branch naming conventions, workflows (GitHub Flow, Git Flow, trunk-based), PR guidelines',
+            'github-issues': 'Issue and PR management — label conventions, templates, linking, automation',
+            'dependency-management': 'Evaluation checklist before adding dependencies — maintenance, licensing, security, bundle size',
+            'multi-agent-orchestration': 'Sub-agent patterns, task decomposition, context passing, model specialization & routing, cost management, anti-patterns',
+            'agent-safety': 'Permission models, destructive operation detection, secrets management, sandboxing, audit trails, rollback patterns',
+          },
+          integrations: {
+            'overview': 'Tool comparison matrix, capability tables, integration patterns, when to choose each tool',
+            'opencode': 'OpenCode terminal agent — MCP setup, AGENTS.md, rules, Plan/Build modes, plugins, model config',
+            'claude-code': 'Claude Code CLI — CLAUDE.md, hooks, sub-agents, Skills, CI/CD, Agent SDK, multi-surface',
+            'cursor': 'Cursor AI IDE — .cursor/rules/, agent mode, background agents, Composer',
+            'vscode-copilot': 'GitHub Copilot in VSCode — copilot-instructions.md, terminal config, inline suggestions',
+            'windsurf': 'Windsurf IDE — .windsurfrules, Cascade mode, AI features',
+            'continue': 'Continue extension — config.json, context providers, multi-provider, open-source',
+          },
+        };
+
+        let output = '# Available Standards\n\n';
+
+        output += '## Core Standards\n\nUse `get_core_standard` to retrieve these:\n\n';
+        for (const [key, desc] of Object.entries(STANDARD_DESCRIPTIONS.core)) {
+          output += `- **${key}**: ${desc}\n`;
+        }
+
+        output += '\n## Workflow Patterns\n\nUse `get_workflow_pattern` to retrieve these:\n\n';
+        for (const [key, desc] of Object.entries(STANDARD_DESCRIPTIONS.workflows)) {
+          output += `- **${key}**: ${desc}\n`;
+        }
+
+        output += '\n## Integration Guides\n\nUse `get_integration_guide` to retrieve these:\n\n';
+        for (const [key, desc] of Object.entries(STANDARD_DESCRIPTIONS.integrations)) {
+          output += `- **${key}**: ${desc}\n`;
+        }
+
+        output += '\n## Search\n\nUse `search_standards` to search across all files by keyword.\n';
+
+        return {
+          content: [
+            {
+              type: 'text',
+              text: output,
             },
           ],
         };
