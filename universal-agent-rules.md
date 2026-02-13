@@ -1,6 +1,6 @@
 # Universal AI Agent Best Practices
 
-**Purpose**: Universal best practices for AI-assisted development that apply across ALL AI coding assistants (GitHub Copilot, Cursor, Claude Code, Windsurf, Continue, etc.).
+**Purpose**: Universal best practices for AI-assisted development that apply across ALL AI coding assistants (OpenCode, Claude Code, Cursor, GitHub Copilot, Windsurf, Continue, Aider, etc.).
 
 **Usage**: Reference these guidelines from your tool-specific instructions file. See `integration/` for tool-specific setup guides.
 
@@ -20,6 +20,8 @@
 - **`workflow-patterns/branch-strategy.md`** - Branch naming and git workflows
 - **`workflow-patterns/github-issues.md`** - Issue and PR management
 - **`workflow-patterns/dependency-management.md`** - Adding and maintaining dependencies
+- **`workflow-patterns/multi-agent-orchestration.md`** - Sub-agent patterns, model routing, task decomposition
+- **`workflow-patterns/agent-safety.md`** - Permissions, destructive operations, secrets management
 
 ---
 
@@ -88,10 +90,17 @@ Model Context Protocol (MCP) is a standardized way for AI assistants to interact
 
 ### Which Tools Support MCP?
 
-**Currently supported**:
+**Full MCP support**:
 
-- ✅ **Claude Code (CLI)** - Full MCP support (see `integration/claude-code.md` for details)
-- 🔄 **Other tools** - Check your tool's documentation for MCP support status
+- ✅ **OpenCode** - stdio, HTTP, and SSE transports (see `integration/opencode.md`)
+- ✅ **Claude Code (CLI)** - stdio transport (see `integration/claude-code.md`)
+
+**Partial/emerging support**:
+
+- 🔄 **Cursor** - Limited MCP support
+- 🔄 **Continue** - Partial support
+- ❌ **GitHub Copilot** - No MCP support yet
+- ❌ **Windsurf** - No MCP support yet
 
 ### Best Practices
 
@@ -103,9 +112,41 @@ Model Context Protocol (MCP) is a standardized way for AI assistants to interact
 
 ### Resources
 
-- **MCP Documentation**: See `integration/claude-code.md` for Claude Code-specific MCP setup and usage
-- **Available MCP Servers**: Check the [Anthropic MCP documentation](https://modelcontextprotocol.io/) for available servers
-- **Custom MCP Servers**: Projects can implement their own MCP servers for specialized needs
+- **MCP Documentation**: See `integration/opencode.md` or `integration/claude-code.md` for tool-specific MCP setup
+- **Available MCP Servers**: Check the [MCP specification](https://modelcontextprotocol.io/) for the protocol and available servers
+- **Custom MCP Servers**: Projects can implement their own MCP servers for specialized needs (this repo includes one!)
+
+---
+
+## 📋 Project Instruction Files
+
+Most AI coding tools support a project-level instruction file that provides context and rules to the agent. **Commit these files to git** so all team members and CI agents share the same instructions.
+
+### Convention by Tool
+
+| Tool | Instruction File | Created By |
+|------|-----------------|------------|
+| **OpenCode** | `AGENTS.md` + `.opencode/rules/*.md` | `/init` command |
+| **Claude Code** | `CLAUDE.md` | Manual or agent-created |
+| **Cursor** | `.cursor/rules/*.md` | Manual |
+| **GitHub Copilot** | `.github/copilot-instructions.md` | Manual |
+| **Windsurf** | `.windsurfrules` | Manual |
+| **Continue** | `.continue/config.json` | Manual |
+
+### Multi-Tool Projects
+
+If your team uses multiple tools, create instruction files for each. All should reference the same universal standards:
+
+```
+project/
+├── AGENTS.md                       # OpenCode
+├── CLAUDE.md                       # Claude Code
+├── .cursor/rules/standards.md      # Cursor
+├── .github/copilot-instructions.md # GitHub Copilot
+├── agentic-dev-standards/          # Shared universal standards
+```
+
+Each file should be minimal — reference the universal standards rather than duplicating content.
 
 ---
 
@@ -503,8 +544,8 @@ project-root/
 
 ---
 
-**Last Updated**: October 31, 2025
-**Version**: 2.0.0 (Refactored for universal tool support)
+**Last Updated**: February 12, 2026
+**Version**: 3.0.0 (Added multi-agent orchestration, agent safety, OpenCode support, project instruction file conventions)
 
 ---
 

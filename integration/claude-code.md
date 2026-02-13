@@ -1,53 +1,52 @@
-# Claude Code (CLI) Integration Guide
+# Claude Code Integration Guide
 
 ## Overview
 
-Claude Code is a CLI tool for AI-assisted development using Claude 3.5 Sonnet. It excels at autonomous workflows, comprehensive codebase understanding, and terminal-first development.
+[Claude Code](https://code.claude.com) is Anthropic's agentic coding tool. It reads your codebase, edits files, runs commands, and integrates with your development tools. Available as a terminal CLI, VS Code/JetBrains extension, desktop app, and web interface.
+
+**Key capabilities**:
+- Autonomous multi-step workflows with sub-agent delegation
+- `CLAUDE.md` project context files (auto-read at session start)
+- Hooks for pre/post action automation
+- Custom slash commands (Skills) for repeatable workflows
+- Full MCP support for extensibility
+- GitHub Actions and GitLab CI/CD integration
+- Multi-surface: terminal, IDE, desktop, web, mobile (iOS), Slack, Chrome
+
+---
 
 ## Setup
 
 ### 1. Install Claude Code
 
 ```bash
-npm install -g @anthropic-ai/claude-code
-# or
-brew install claude-code
+# macOS, Linux, WSL (recommended — auto-updates)
+curl -fsSL https://claude.ai/install.sh | bash
+
+# Homebrew (manual updates via brew upgrade)
+brew install --cask claude-code
+
+# Windows PowerShell
+irm https://claude.ai/install.ps1 | iex
+
+# Windows WinGet
+winget install Anthropic.ClaudeCode
 ```
 
-### 2A. MCP Server Setup (RECOMMENDED - Token Efficient!)
+### 2A. MCP Server Setup (RECOMMENDED)
 
-**Model Context Protocol (MCP)** allows Claude to fetch standards on-demand rather than loading everything upfront, resulting in **74-86% token reduction** per session.
+Configure this standards repo as an MCP server for on-demand access to all standards.
 
-#### Benefits of MCP
+**Add to your Claude Code MCP configuration**:
 
-- ✅ **Massive token savings**: Only load standards when actually needed
-- ✅ **One-time setup**: Configure once, works across all projects
-- ✅ **Instant updates**: No submodule management required
-- ✅ **Cleaner projects**: No submodule directory needed
-- ✅ **Automatic loading**: Claude fetches standards as needed
-
-#### Step-by-Step MCP Setup
-
-**1. Clone and install the standards repository**:
-
+Use the Claude Code CLI to add the server:
 ```bash
-# Clone to a permanent location (not per-project)
-cd ~/Development  # or your preferred location
-git clone https://github.com/k-f-/agentic-dev-standards.git
-cd agentic-dev-standards
-
-# Install dependencies
-npm install
+claude mcp add agentic-dev-standards node /full/path/to/agentic-dev-standards/mcp-server.js
 ```
 
-**2. Configure Claude Code**:
-
-Edit your Claude desktop config file:
-- **macOS**: `~/Library/Application Support/Claude/claude_desktop_config.json`
-- **Linux**: `~/.config/Claude/claude_desktop_config.json`
-- **Windows**: `%APPDATA%\Claude\claude_desktop_config.json`
-
-Add the MCP server configuration:
+Or manually edit your config:
+- **macOS**: `~/.claude/` configuration
+- **Linux**: `~/.claude/` configuration
 
 ```json
 {
@@ -60,469 +59,386 @@ Add the MCP server configuration:
 }
 ```
 
-**Important**: Replace `/full/path/to` with your actual path (e.g., `/Users/yourname/Development/agentic-dev-standards/mcp-server.js`)
-
-**3. Restart Claude Code**:
-
-```bash
-# Exit any running Claude sessions
-exit
-
-# Verify MCP server is loaded (optional)
-# Check ~/.claude/logs/ for MCP connection messages
-```
+**Important**: Replace `/full/path/to` with your actual path.
 
 #### Available MCP Tools
 
-Once configured, Claude has access to these tools (automatically invoked as needed):
+1. **`get_core_standard`** — Core standards (universal-agent-rules, terminal-standards, commit-conventions)
+2. **`get_workflow_pattern`** — Workflow patterns (context-preservation, session-management, branch-strategy, github-issues, dependency-management, multi-agent-orchestration, agent-safety)
+3. **`get_integration_guide`** — Tool-specific guides (overview, vscode-copilot, cursor, claude-code, windsurf, continue, opencode)
+4. **`search_standards`** — Full-text search across all standards
+5. **`list_available_standards`** — Discover all available standards and their descriptions
 
-1. **`get_core_standard`** - Retrieve core standards
-   - `universal-agent-rules` - Meta-rules, MCP guidance, testing, code quality
-   - `terminal-standards` - CRITICAL: Clean shell environment requirements
-   - `commit-conventions` - Conventional Commits format
+#### Token Savings
 
-2. **`get_workflow_pattern`** - Retrieve workflow patterns
-   - `context-preservation` - Token management, ADRs
-   - `session-management` - Session start checklist, summaries
-   - `branch-strategy` - Git workflows, PR guidelines
-   - `github-issues` - Issue/PR management
-   - `dependency-management` - Dependency evaluation
-
-3. **`get_integration_guide`** - Retrieve tool-specific guides
-   - `overview` - Comparison matrix
-   - `vscode-copilot` - GitHub Copilot setup
-   - `cursor` - Cursor IDE setup
-   - `claude-code` - This guide!
-   - `windsurf` - Windsurf IDE setup
-   - `continue` - Continue extension setup
-
-4. **`search_standards`** - Search across all standards
-   - Find relevant sections by keyword
-   - Returns matching lines with context
-
-#### Testing MCP Setup
-
-Start Claude Code in any project:
-
-```bash
-cd your-project
-claude
-```
-
-Try asking:
-
-```
-You: "What are the terminal standards?"
-
-Claude: [Automatically fetches terminal-standards.md via MCP and explains]
-```
-
-Or:
-
-```
-You: "Show me the commit conventions"
-
-Claude: [Fetches commit-conventions.md and displays]
-```
-
-You don't need to explicitly tell Claude to use MCP - it will automatically fetch standards as needed!
-
-#### Updating Standards
-
-To get latest standards:
-
-```bash
-cd ~/Development/agentic-dev-standards  # or wherever you cloned it
-git pull origin main
-```
-
-Changes are immediately available to Claude - no configuration updates needed!
-
-#### Token Savings Example
-
-**Without MCP** (traditional submodule approach):
-```
-Session start:
-You: "Read agentic-dev-standards/universal-agent-rules.md"
-You: "Read agentic-dev-standards/terminal-standards.md"
-You: "Read agentic-dev-standards/commit-conventions.md"
-You: "Read all workflow patterns..."
-Result: ~23,000 tokens loaded upfront
-```
-
-**With MCP**:
-```
-Session start: 0 tokens from standards
-You: "Help me commit this change"
-Claude: [Fetches commit-conventions.md = 1,000 tokens, only when needed]
-Result: ~1,000 tokens (96% reduction!)
-```
+**Without MCP** (loading everything upfront): ~23,000 tokens per session start
+**With MCP** (on-demand): ~1,000 tokens per standard fetched, only when needed
 
 ### 2B. Traditional Submodule Setup (Alternative)
-
-If you prefer the traditional approach or need standards in your git repository:
 
 ```bash
 git submodule add https://github.com/k-f-/agentic-dev-standards.git
 git submodule update --init --recursive
 ```
 
-**Note**: With MCP setup, you don't need submodules anymore! Each project can be cleaner without the submodule directory.
+### 3. Configure CLAUDE.md
 
-### 3. Configure Project Context
+`CLAUDE.md` is Claude Code's project context file — a markdown file in your project root that Claude reads at the start of every session. Use it to set coding standards, architecture decisions, and project-specific instructions.
 
-Claude Code doesn't use a specific config file like `.cursorrules`. Instead, it reads from:
-
-- Project files and structure
-- README.md
-- Documentation in `docs/`
-- Context provided in conversation
-
-**Best Practice**: Create `docs/development/claude-code-context.md`:
+**Create `CLAUDE.md`** in your project root:
 
 ```markdown
-# Claude Code Context for [Project Name]
+# Project Context
 
-## Universal Standards
+## Standards
+This project follows universal development standards via MCP (agentic-dev-standards).
+Fetch standards on-demand using the MCP tools when needed.
 
-This project follows universal standards from `agentic-dev-standards/`:
+## Architecture
+[Describe your project architecture]
 
-**CRITICAL - Read these first**:
-1. `agentic-dev-standards/terminal-standards.md` - Clean bash environment requirements
-2. `agentic-dev-standards/commit-conventions.md` - Conventional Commits
-3. `agentic-dev-standards/universal-agent-rules.md` - Universal best practices
+## Key Decisions
+[Document important technical decisions]
 
-**Workflow patterns**:
-- `agentic-dev-standards/workflow-patterns/session-management.md`
-- `agentic-dev-standards/workflow-patterns/branch-strategy.md`
-- `agentic-dev-standards/workflow-patterns/github-issues.md`
-- `agentic-dev-standards/workflow-patterns/dependency-management.md`
+## Coding Standards
+- [Language-specific conventions]
+- [Testing requirements]
+- [PR review process]
 
-## Project-Specific Context
-
-[Your project details]
+## Common Commands
+- Build: `npm run build`
+- Test: `npm test`
+- Lint: `npm run lint`
 ```
 
-### 4. Start Session
+**Commit `CLAUDE.md` to your repo** — it's shared project context, not personal config.
+
+### 4. Configure Permissions
+
+**Per-project** (`.claude/settings.json`, committed):
+```json
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm test)",
+      "Bash(npm run build)",
+      "Bash(npm run lint)",
+      "Bash(git --no-pager *)",
+      "Read(*)"
+    ],
+    "deny": [
+      "Bash(git push --force*)",
+      "Bash(rm -rf *)"
+    ]
+  }
+}
+```
+
+**Per-user** (`.claude/settings.local.json`, gitignored):
+```json
+{
+  "permissions": {
+    "allow": [
+      "Bash(git *)",
+      "Write(src/**)"
+    ]
+  }
+}
+```
+
+See `workflow-patterns/agent-safety.md` for comprehensive permission guidance.
+
+---
+
+## Usage
+
+### Terminal CLI
+
+The primary interface. Start in any project:
 
 ```bash
 cd your-project
 claude
 ```
 
-**First interaction**:
-
-```
-You: "Please read docs/development/claude-code-context.md and the universal standards from agentic-dev-standards/"
-
-Claude: [reads files and confirms understanding]
-```
-
-## Usage
-
-### Autonomous Mode
-
-Claude Code can work autonomously on complex tasks:
-
-```
-You: "Add user authentication with JWT tokens. Follow all standards from agentic-dev-standards/. Create session summary when done."
-
-Claude: [Plans the work]
-I'll implement JWT authentication following the universal standards:
-
-1. Create feature branch (feature/user-authentication)
-2. Add jsonwebtoken dependency (with evaluation per dependency-management.md)
-3. Implement auth middleware
-4. Add tests
-5. Use conventional commits
-6. Create session summary
-
-Shall I proceed?
-
-You: "Yes"
-
-Claude: [Works autonomously, following standards]
-```
-
-### Interactive Mode
-
-```bash
-# Start interactive session
-claude
-
-# Ask questions
-You: "Explain the authentication flow"
-
-# Request changes
-You: "Refactor the validation logic to be more modular"
-
-# Get codebase insights
-You: "Show me all API endpoints"
-```
-
-### One-Shot Commands
-
+**One-shot commands** (non-interactive):
 ```bash
 # Ask a question
 claude "Where is error handling implemented?"
 
-# Request analysis
-claude "Review the security of the authentication module"
+# Pipe input
+git diff | claude "Review this diff for security issues"
 
-# Generate code
-claude "Create a new API endpoint for user profiles"
+# Automate in scripts
+claude -p "Translate new strings into French and raise a PR"
 ```
+
+### VS Code Extension
+
+Install from the Extensions view — search "Claude Code" or use:
+- [Install for VS Code](vscode:extension/anthropic.claude-code)
+- [Install for Cursor](cursor:extension/anthropic.claude-code)
+
+Features: inline diffs, @-mentions, plan review, conversation history in the editor.
+
+### JetBrains Plugin
+
+Install from the JetBrains Marketplace — search "Claude Code". Supports IntelliJ IDEA, PyCharm, WebStorm, and other JetBrains IDEs.
+
+### Desktop App
+
+Standalone app for running sessions outside your IDE. Download from:
+- [macOS](https://claude.ai/api/desktop/darwin/universal/dmg/latest/redirect)
+- [Windows](https://claude.ai/api/desktop/win32/x64/exe/latest/redirect)
+
+### Web Interface
+
+Run Claude Code in your browser at [claude.ai/code](https://claude.ai/code). No local setup required. Works on desktop browsers and the Claude iOS app.
+
+### Slack Integration
+
+Mention `@Claude` in Slack with a bug report or feature request to get a pull request back. See [Claude Code Slack docs](https://docs.anthropic.com/en/docs/claude-code/slack).
+
+---
+
+## Sub-Agents
+
+Claude Code can spawn multiple sub-agents to work on different parts of a task simultaneously.
+
+### How It Works
+
+A lead agent coordinates the work, assigns subtasks, and merges results:
+
+```
+You: "Refactor the auth module and update all tests"
+
+Claude: I'll split this into parallel tasks:
+  → Sub-agent 1: Refactor auth middleware 
+  → Sub-agent 2: Update unit tests
+  → Sub-agent 3: Update integration tests
+  
+  [Agents work in parallel]
+  
+  All sub-agents complete. Merging results and verifying...
+```
+
+### Sub-Agent Types
+
+- **`general`** — Multi-step tasks, research, complex operations
+- **`explore`** — Fast codebase search and exploration
+
+### Best Practices
+
+- Use sub-agents for 3+ independent units of work
+- Keep sub-agent prompts focused and specific
+- Verify merged results (run tests, check consistency)
+- See `workflow-patterns/multi-agent-orchestration.md` for comprehensive patterns
+
+---
+
+## Hooks
+
+Hooks let you run shell commands before or after Claude Code actions. Configure in `.claude/settings.json`:
+
+```json
+{
+  "hooks": {
+    "afterFileEdit": [
+      "prettier --write $FILE"
+    ],
+    "beforeCommit": [
+      "npm run lint",
+      "npm test"
+    ]
+  }
+}
+```
+
+**Common hooks**:
+- Auto-format after every file edit
+- Run lint before commits
+- Run tests before pushing
+- Generate types after schema changes
+
+---
+
+## Custom Slash Commands (Skills)
+
+Package repeatable workflows as slash commands your team can share:
+
+**`.claude/commands/review-pr.md`**:
+```markdown
+Review the current PR. Check for:
+1. Code quality and readability
+2. Test coverage
+3. Security issues
+4. Performance concerns
+5. Documentation completeness
+
+Provide feedback in conventional comments format.
+```
+
+**Usage**: Type `/review-pr` in the Claude Code session.
+
+---
+
+## CI/CD Integration
+
+### GitHub Actions
+
+Automate code review, issue triage, and PR management:
+
+```yaml
+# .github/workflows/claude-review.yml
+name: Claude Code Review
+on: [pull_request]
+jobs:
+  review:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: anthropic/claude-code-action@v1
+        with:
+          prompt: "Review this PR for code quality, security, and test coverage"
+```
+
+### GitLab CI/CD
+
+```yaml
+claude-review:
+  stage: review
+  script:
+    - claude -p "Review the changes in this merge request"
+```
+
+---
 
 ## Terminal Standards
 
-Claude Code **natively follows clean bash practices**. It automatically:
-
+Claude Code natively follows clean bash practices. It automatically:
 - Uses clean shell environments
 - Avoids pagers (`git --no-pager`)
-- Uses absolute paths for core utilities
 - Combines commands efficiently
 
-**However**, you should still remind it:
+See `terminal-standards.md` for the complete specification.
 
-```
-"Follow terminal-standards.md from agentic-dev-standards/ for all commands"
-```
+---
 
-## Key Features
+## Key Features Comparison
 
-**vs GitHub Copilot**:
+| Feature | Claude Code | OpenCode | Cursor |
+|---------|-------------|----------|--------|
+| **Instruction File** | `CLAUDE.md` | `AGENTS.md` | `.cursor/rules/` |
+| **MCP Support** | Yes | Yes (stdio, http, sse) | Limited |
+| **Sub-Agents** | Task tool (general, explore) | `@general` | Background agents |
+| **Hooks** | Before/after actions | Via formatters/plugins | N/A |
+| **Custom Commands** | `.claude/commands/` | `.opencode/commands/` | N/A |
+| **CI/CD Integration** | GitHub Actions, GitLab | N/A | N/A |
+| **IDE Support** | VS Code, JetBrains | VS Code (beta) | Is the IDE |
+| **Web Interface** | claude.ai/code | opencode.ai | No |
+| **Slack Integration** | Yes | No | No |
+| **Open Source** | No | Yes (MIT) | No |
 
-- ✅ Much better at autonomous multi-step tasks
-- ✅ Excellent codebase comprehension
-- ✅ Natural conversation interface
-- ✅ Can read and write any files
-- ❌ No inline code completion
-- ❌ Terminal-only (no IDE integration)
-
-**vs Cursor**:
-
-- ✅ Better for complex autonomous tasks
-- ✅ More powerful context understanding
-- ✅ Terminal-first workflow
-- ❌ No IDE interface
-- ❌ No inline editing
+---
 
 ## Best Practices
 
 ### Starting a Session
 
-```
-You: "Read universal standards from agentic-dev-standards/:
-1. terminal-standards.md
-2. commit-conventions.md
-3. universal-agent-rules.md
-
-Then read docs/development/claude-code-context.md
-
-Confirm you've read all files and understand the standards."
-```
+1. `claude` in your project directory
+2. Claude auto-reads `CLAUDE.md` — no manual loading needed
+3. Reference standards via MCP when needed:
+   ```
+   "Fetch the branch-strategy workflow pattern — I need to set up a new feature branch"
+   ```
 
 ### During Development
 
-**Leverage autonomous capabilities**:
+- **Leverage autonomous mode**: Describe the goal, let Claude plan and execute
+  ```
+  "Add rate limiting to the API. Follow conventional commits. Run tests when done."
+  ```
+- **Use sub-agents**: For large tasks, Claude will automatically parallelize when appropriate
+- **Pipe context in**: `git diff | claude "Review this"` is powerful for quick feedback
+- **Let hooks handle formatting**: Configure `afterFileEdit` hooks so you never think about it
 
-```
-"Implement feature X following all universal standards.
-Break it into atomic commits.
-Create session summary when complete."
-```
+### Ending a Session
 
-**Track progress**:
+1. Ensure all changes are committed
+2. Create a session summary:
+   ```
+   "Create session summary in docs/archive/session-summaries/ 
+    following the session-management workflow pattern"
+   ```
 
-```
-"Show current status: branch, commits, pending tasks"
-```
+---
 
-### End of Session
+## Agent SDK
 
-```
-"Create session summary in docs/archive/session-summaries/YYYY-MM-DD_topic.md following session-management.md standards"
-```
+For building custom agents powered by Claude Code's tools and capabilities:
 
-## Example Session
+- Full control over orchestration, tool access, and permissions
+- Build specialized agents for your team's workflows
+- See [Agent SDK documentation](https://platform.claude.com/docs/en/agent-sdk/overview)
 
-```bash
-$ cd my-project
-$ claude
-
-You: Read universal standards from agentic-dev-standards/ and docs/development/claude-code-context.md
-
-Claude: I've read all the files. Key standards I'll follow:
-- Clean bash wrapper for all commands
-- Conventional Commits (feat:, fix:, docs:, etc.)
-- Atomic commits (one logical change per commit)
-- Never use pagers
-- Document decisions
-
-Ready to work. What would you like me to help with?
-
-You: Add rate limiting to the API. Follow all standards.
-
-Claude: I'll implement rate limiting:
-
-1. Evaluate dependencies (express-rate-limit vs alternatives)
-2. Create feature branch: feature/api-rate-limiting
-3. Add middleware with configuration
-4. Add tests
-5. Update documentation
-6. Make atomic commits
-7. Create session summary
-
-Starting now...
-
-[Claude works autonomously]
-
-Claude: ✅ Complete. Created:
-- 4 commits following conventional commits format
-- feat: Add rate limiting middleware
-- test: Add rate limiting tests
-- docs: Document rate limiting configuration
-- chore: Add express-rate-limit dependency
-
-Session summary: docs/archive/session-summaries/2025-10-31_api-rate-limiting.md
-
-Ready for PR creation or next task?
-
-You: Create PR
-
-Claude: Creating PR with proper description...
-[Creates PR following branch-strategy.md standards]
-```
-
-## Integration with Git
-
-Claude Code has excellent git integration:
-
-```
-# Automatic branch management
-"Create feature branch for X"
-
-# Atomic commits
-"Commit these changes with appropriate conventional commit message"
-
-# PR creation
-"Create pull request for current branch"
-
-# Git operations
-"Rebase current branch onto main"
-"Squash last 3 commits"
-"Cherry-pick commit abc123 from main"
-```
+---
 
 ## Troubleshooting
 
-### Claude not following standards
+### Claude Not Following Standards
 
-**Solution**: Explicitly reference files:
-
+**Fix**: Ensure `CLAUDE.md` references the standards. If using MCP, verify the MCP server is loaded:
 ```
-"Follow the standards in:
-- agentic-dev-standards/terminal-standards.md
-- agentic-dev-standards/commit-conventions.md"
+"List the MCP tools you have available"
 ```
 
-### Context not persisted between sessions
+### MCP Server Not Loading
 
-**Solution**: Create session summary at end of each session:
+**Fix**:
+1. Verify path: `claude mcp list` should show the server
+2. Check logs: `~/.claude/logs/`
+3. Test the server manually: `node /path/to/mcp-server.js`
+4. Ensure `npm install` was run in the standards directory
 
-```
-"Create session summary following workflow-patterns/session-management.md"
-```
+### Context Not Persisting Between Sessions
 
-Next session, reference it:
+**Fix**: Create session summaries at end of each session. Next session, Claude reads `CLAUDE.md` automatically and you can reference previous summaries.
 
-```
-"Read the latest session summary from docs/archive/session-summaries/"
-```
+### Commands Hanging
 
-### Commands failing
+**Fix**: Ensure no pagers are triggered. Claude Code handles this well, but verify:
+- `git config --global core.pager ""` or use `git --no-pager`
+- Never use `less`, `more`, or `man` in agent workflows
 
-**Solution**: Claude Code handles terminal well, but verify:
-
-```
-"Use clean bash wrapper from terminal-standards.md"
-"Never use pagers - always use git --no-pager"
-```
-
-## Advanced Usage
-
-### Custom Workflows
-
-Create project-specific workflow docs that reference universal standards:
-
-```markdown
-# docs/development/workflows/new-feature.md
-
-## Adding a New Feature
-
-Follow universal standards from `agentic-dev-standards/`, with these project-specific steps:
-
-1. Create feature branch (per branch-strategy.md)
-2. Add feature with tests
-3. Update API documentation
-4. Run integration tests against staging
-5. Create PR (per github-issues.md)
-6. Deploy to staging
-7. QA approval
-8. Merge and deploy to production
-```
-
-Then:
-
-```
-You: "Add new feature X following docs/development/workflows/new-feature.md"
-```
-
-### Integration with CI/CD
-
-Claude can interact with CI/CD:
-
-```
-You: "Check CI status for current PR"
-You: "Fix the failing tests in CI"
-You: "Deploy current branch to staging"
-```
+---
 
 ## Summary
 
 **Key Strengths**:
-
-- Autonomous multi-step workflows
-- Excellent codebase understanding
-- Natural terminal-first interaction
-- Powerful git integration
-- Follows standards well when instructed
+- Multi-surface (terminal, IDE, desktop, web, Slack, CI/CD)
+- Sub-agent delegation for parallel work
+- Hooks and custom commands for automation
+- `CLAUDE.md` for shared project context
+- GitHub Actions / GitLab CI integration
 
 **Setup**:
-
-- Add `agentic-dev-standards` submodule
-- Create `docs/development/claude-code-context.md`
-- Reference standards at session start
+1. Install via `curl -fsSL https://claude.ai/install.sh | bash`
+2. Configure MCP server for agentic-dev-standards
+3. Create `CLAUDE.md` in project root
+4. Configure permissions in `.claude/settings.json`
 
 **Usage Pattern**:
-
-1. Start session: `claude`
-2. Load context: "Read standards from agentic-dev-standards/"
-3. Work autonomously: "Implement feature X following all standards"
-4. End session: "Create session summary"
-
-**Best For**:
-
-- Complex multi-file refactorings
-- Feature implementation end-to-end
-- Codebase analysis and understanding
-- Terminal-first developers
-- Autonomous workflows
+1. Start: `claude` in project directory
+2. Context: `CLAUDE.md` auto-loaded, standards via MCP
+3. Work: Autonomous mode with sub-agent delegation
+4. Verify: Hooks auto-format and lint
+5. Commit: Conventional commits
+6. End: Session summary
 
 ---
 
-For universal standards applicable to all tools:
+**Last Updated**: February 12, 2026
 
+For universal standards applicable to all tools:
 - [`universal-agent-rules.md`](../universal-agent-rules.md)
 - [`terminal-standards.md`](../terminal-standards.md)
 - [`commit-conventions.md`](../commit-conventions.md)

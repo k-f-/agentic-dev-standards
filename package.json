@@ -1,6 +1,6 @@
 {
   "name": "agentic-dev-standards-mcp",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "MCP server providing on-demand access to universal agentic development standards, conventions, and workflow patterns",
   "type": "module",
   "main": "mcp-server.js",
@@ -8,7 +8,8 @@
     "agentic-dev-standards-mcp": "./mcp-server.js"
   },
   "scripts": {
-    "start": "node mcp-server.js"
+    "start": "node mcp-server.js",
+    "test": "node --test test/"
   },
   "keywords": [
     "mcp",
@@ -17,6 +18,7 @@
     "coding-standards",
     "development-standards",
     "agentic-coding",
+    "opencode",
     "claude-code",
     "github-copilot",
     "cursor",

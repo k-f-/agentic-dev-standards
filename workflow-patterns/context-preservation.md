@@ -7,7 +7,7 @@ AI coding assistants have context window limitations that can cause them to "for
 ## 🎯 The Challenge
 
 **Context Window Constraints**:
-- Most AI models have finite context windows (e.g., 200k tokens for Claude 3.5 Sonnet)
+- AI models have finite context windows (e.g., 200k tokens for Claude, 128k-1M+ for Gemini, 128k for GPT-4o)
 - Long conversations can exceed these limits
 - Context loss leads to:
   - Repeated questions
@@ -443,17 +443,32 @@ Organize context in layers by importance:
 - @-mention related files for context
 - Create checkpoints in long conversations
 
-### Claude Code
+### OpenCode
 
-**Largest context window**:
-- 200k token context window
-- Excellent at understanding large codebases
-- Can read many files in one session
+**Provider-agnostic context**:
+- Context window depends on model chosen (200k+ for Claude, 128k-1M+ for Gemini)
+- Plan/Build mode split helps preserve context (Plan mode for exploration, Build for changes)
+- Plugin ecosystem for automated context management
 
 **Strategies**:
-- Load all relevant standards at session start
+- Use MCP server for on-demand standard loading
+- Use Dynamic Context Pruning plugin for automatic token management
+- Use Handoff plugin for automated session summaries
+- Switch to Plan mode for research to avoid wasting context on edits
+- Use `@general` sub-agent to offload search tasks
+
+### Claude Code
+
+**Large context window**:
+- 200k token context window
+- Excellent at understanding large codebases
+- Sub-agents (Task tool) for context-efficient delegation
+
+**Strategies**:
+- Use MCP server for on-demand standard loading
 - Create comprehensive session summaries
 - Use session handoff pattern
+- Delegate search tasks to `explore` sub-agent
 - Monitor token usage (shown in output)
 
 ### Windsurf / Continue
@@ -549,6 +564,6 @@ Organize context in layers by importance:
 
 ---
 
-**Last Updated**: 2025-11-11
-**Version**: 1.0.0
-**Related Standards**: Session Management, Universal Agent Rules
+**Last Updated**: 2026-02-12
+**Version**: 1.1.0
+**Related Standards**: Session Management, Universal Agent Rules, Multi-Agent Orchestration
